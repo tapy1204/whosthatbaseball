@@ -24,6 +24,77 @@
     font-weight: 800;
   }
 
+  .month {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 18px;
+    font-size: 16px;
+    font-weight: 600;
+    opacity: 0.85;
+    padding-bottom: 12px;
+  }
+
+  .week-nav {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    cursor: pointer;
+    padding: 0 4px;
+  }
+
+  .week-nav:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  .calendar {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .calendar .day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius:26%;
+    gap: 4px;
+    width: 34px;
+    padding: 12px 0 4px;
+  }
+
+  .calendar .day-label {
+    font-size: 12px;
+    opacity: 0.6;
+    line-height: 1;
+  }
+
+  .calendar .date-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    opacity: 0.6;
+    padding: 3px 0 0 1px;
+    box-sizing: border-box;
+  }
+
+  .calendar .day.today{
+    color: #3be06a;
+  }
+
+  .calendar .day.today .day-label {
+    opacity: 1;
+  }
+
+  .calendar .day.today .date-num {
+    opacity: 1;
+  }
+
   @media (max-width: 600px) { /* 모바일 */
     header { text-align: left; }
     header { padding: 32px 50px; }
@@ -31,12 +102,95 @@
     header h1 { font-weight: 800; }
     header h1 .line2 { display: block; }
     header h1 .line3 { display: block; }
+    .month { justify-content: flex-start; font-weight: 700; padding: 0 50px 9px;}
+    #month { font-size: 27px; }
+    #week { font-size: 18px; }
+    .calendar { gap: 12px; padding: 0 50px 12px; }
+    .calendar .day { gap: 0px; width: 60px; }
+    .calendar .day-label { font-size: 14px; }
+    .calendar .date-num {
+    border-radius: 20%;
+    font-size: 30px;
+    font-weight: 700;
   }
+  }
+  
 </style>
 </head>
 <body>
   <header>
     <h1>Who's <span class="line2">That</span> <span class="line3">Baseball</span></h1>
   </header>
+
+  <div class="month">
+    <span id="month"></span>
+    <button class="week-nav" id="prevWeek" aria-label="이전 주">&lt;</button>
+    <span id="week"></span>
+    <button class="week-nav" id="nextWeek" aria-label="다음 주">&gt;</button>
+  </div>
+  <div class="calendar" id="calendar"></div>
+
+  <script>
+    const dayLabels = ['월', '화', '수', '목', '금', '토', '일'];
+    const monthEl = document.getElementById('month');
+    const weekEl = document.getElementById('week');
+    const calendarEl = document.getElementById('calendar');
+    const prevWeekBtn = document.getElementById('prevWeek');
+    const nextWeekBtn = document.getElementById('nextWeek');
+
+    const realToday = new Date();
+    const realTodayStr = realToday.toDateString();
+
+    let weekOffset = 0; // 0 = 이번 주, 음수 = 과거 주
+
+    function renderWeek(offset) {
+      const base = new Date(realToday);
+      base.setDate(base.getDate() + offset * 7);
+      const baseIndex = (base.getDay() + 6) % 7; // 월=0 ... 일=6
+      const monday = new Date(base);
+      monday.setDate(base.getDate() - baseIndex);
+
+      const thursday = new Date(monday);
+      thursday.setDate(monday.getDate() + 3);
+
+      // 목요일 기준 몇 번째 주인지: 같은 달의 목요일들은 항상 7일 간격이므로
+      // 날짜를 7일 단위로 묶으면 몇 일에 시작하든 첫 주는 항상 1주차가 됨
+      const weekOfMonth = Math.floor((thursday.getDate() - 1) / 7) + 1;
+
+      monthEl.textContent = `${thursday.getFullYear()}년 ${thursday.getMonth() + 1}월`;
+      weekEl.textContent = `${weekOfMonth}주차`;
+
+      calendarEl.innerHTML = '';
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(monday);
+        d.setDate(monday.getDate() + i);
+        const isToday = d.toDateString() === realTodayStr;
+
+        const dayEl = document.createElement('div');
+        dayEl.className = 'day' + (isToday ? ' today' : '');
+        dayEl.innerHTML = `
+          <span class="day-label">${dayLabels[i]}</span>
+          <span class="date-num">${String(d.getDate()).padStart(2, '0')}</span>
+        `;
+        calendarEl.appendChild(dayEl);
+      }
+
+      nextWeekBtn.disabled = offset >= 0;
+    }
+
+    prevWeekBtn.addEventListener('click', () => {
+      weekOffset -= 1;
+      renderWeek(weekOffset);
+    });
+
+    nextWeekBtn.addEventListener('click', () => {
+      if (weekOffset < 0) {
+        weekOffset += 1;
+        renderWeek(weekOffset);
+      }
+    });
+
+    renderWeek(weekOffset);
+  </script>
 </body>
 </html>
