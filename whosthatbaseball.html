@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who's That Baseball</title>
+<style>
+  body {
+    margin: 0;
+    background-color: #232326;
+    color: #ffffff;
+    font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+  }
+
+  header {
+    text-align: center;
+    padding: 32px 16px;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 40px;
+    letter-spacing: 0.8px;
+    font-weight: 800;
+  }
+
+  @media (max-width: 600px) { /* 모바일 */
+    header { text-align: left; }
+    header { padding: 32px 50px; }
+    header h1 { font-size: 50px; }
+    header h1 { font-weight: 800; }
+    header h1 .line2 { display: block; }
+    header h1 .line3 { display: block; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Who's <span class="line2">That</span> <span class="line3">Baseball</span></h1>
+  </header>
+</body>
+</html>
