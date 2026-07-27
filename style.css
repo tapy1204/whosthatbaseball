@@ -7,7 +7,7 @@
     max-width: 480px;
     background-color: rgb(30, 30, 33);
     color: #ffffff;
-    font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
   }
 
   .snap-section {
@@ -30,17 +30,10 @@
 
   header h1 {
     margin: 0;
-    font-size: 50px;
-    letter-spacing: 0.8px;
+    font-size: 32px;
+    letter-spacing: 0.4px;
     font-weight: 800;
-  }
-
-  header h1 .line2 {
-    display: block;
-  }
-
-  header h1 .line3 {
-    display: block;
+    white-space: nowrap;
   }
 
   .month {
@@ -55,6 +48,7 @@
     font-weight: 700;
     opacity: 0.85;
     padding: 0 50px 9px;
+    box-sizing: border-box;
   }
 
   #month {
@@ -92,11 +86,10 @@
   .calendar {
     width: 320px;
     max-width: 90%;
-    margin: 0 auto;
+    margin: 0 auto 12px;
     display: flex;
     justify-content: space-between;
     gap: 12px;
-    padding: 0 50px 12px;
   }
 
   .calendar .day {
@@ -259,6 +252,7 @@
     max-width: 90%;
     margin: 20px auto;
     padding: 0 50px;
+    box-sizing: border-box;
   }
 
   .games-header {
@@ -288,8 +282,8 @@
   }
 
   .game-card {
-    flex: 0 0 220px;
-    height: 190px;
+    flex: 0 0 160px;
+    height: 240px;
     border-radius: 24px;
     padding: 24px 24px 28px;
     display: flex;
