@@ -163,14 +163,14 @@
   }
 
   .status-card-no .no-label {
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 12px;
+    font-weight: 500;
     opacity: 0.5;
   }
 
   .status-card-no .no-number {
-    font-size: 44px;
-    font-weight: 800;
+    font-size: 32px;
+    font-weight: 700;
     line-height: 1;
   }
 
@@ -201,6 +201,7 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    padding: 5px 0 0;
     gap: 16px;
   }
 
@@ -236,7 +237,7 @@
     color: #ffffff;
     border: none;
     border-radius: 999px;
-    padding: 14px 22px;
+    padding: 10px 20px;
     font-size: 16px;
     font-weight: 700;
     font-family: inherit;
