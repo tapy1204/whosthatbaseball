@@ -230,7 +230,7 @@
     sharebox:$('sharebox'), shareLabel:$('shareLabel'), shareCnt:$('shareCnt'), emojiBar:$('emojiBar'),
     share:$('share'), btnRetry:$('btnRetry'), btnKakao:$('btnKakao'), btnCopy:$('btnCopy'),
     howto:$('howto'), actions:$('actions'), btnBack:$('btnBack'), btnGiveup:$('btnGiveup'),
-    navNo:$('navNo'), toast:$('toast'),
+    navNo:$('navNo'), navPrev:$('navPrev'), navNext:$('navNext'), toast:$('toast'),
   };
 
   // ── 날짜(KST) ─────────────────────────
@@ -566,11 +566,12 @@
   }
 
   // ── 저장/복원 ─────────────────────────
+  // 경기(gameNo)마다 독립적으로 저장 -> PREV/NEXT로 오가도 서로 안 섞임
+  function storeKey(no) { return `${STORE_KEY}_${no}`; }
+
   function save() {
     try {
-      localStorage.setItem(STORE_KEY, JSON.stringify({
-        date: kstDateStr(),
-        no: gameNo,
+      localStorage.setItem(storeKey(gameNo), JSON.stringify({
         lineup: lineup.map(s => ({
           order: s.order, status: s.status, preview: s.preview || '',
           tries: s.tries,
@@ -578,13 +579,12 @@
       }));
     } catch(e){}
   }
-  function load() {
+  function load(no) {
     try {
-      const raw = localStorage.getItem(STORE_KEY);
+      const raw = localStorage.getItem(storeKey(no));
       if (!raw) return null;
-      const d = JSON.parse(raw);
-      return (d && d.date === kstDateStr() && d.no === gameNo) ? d : null;
-    } catch(e) { try{localStorage.removeItem(STORE_KEY);}catch(_){} return null; }
+      return JSON.parse(raw);
+    } catch(e) { try{localStorage.removeItem(storeKey(no));}catch(_){} return null; }
   }
 
   // ── 공유 ──────────────────────────────
@@ -649,8 +649,16 @@
   });
   el.btnCopy.addEventListener('click', copyResult);
   el.btnKakao.addEventListener('click', copyResult);
-  $('navPrev').addEventListener('click', () => toast('지난 경기는 준비 중이에요'));
-  $('navNext').addEventListener('click', () => toast('다음 경기는 내일 자정에 열려요'));
+  el.navPrev.addEventListener('click', () => {
+    const idx = gameNo - 1 - 1; // gameNo(1-based) -> 현재 index, 그 전 index
+    if (idx < 0) { toast('첫 경기예요'); return; }
+    loadGame(idx);
+  });
+  el.navNext.addEventListener('click', () => {
+    const idx = gameNo - 1 + 1; // 현재 index + 1
+    if (idx > todayIdx) { toast('다음 경기는 아직 공개되지 않았어요'); return; }
+    loadGame(idx);
+  });
 
   // 물리 키보드 지원
   document.addEventListener('keydown', e => {
@@ -669,46 +677,43 @@
     }
   });
 
-  // 개발용: 제목 클릭 초기화 (배포 전 삭제)
+  // 개발용: 제목 클릭 초기화 (배포 전 삭제) - 지금 보고 있는 경기의 저장값만 지움
   const devReset = $('devReset');
-  if (devReset) devReset.addEventListener('click', () => { localStorage.removeItem(STORE_KEY); location.reload(); });
+  if (devReset) devReset.addEventListener('click', () => { localStorage.removeItem(storeKey(gameNo)); location.reload(); });
 
   // ── 시작 ──────────────────────────────
-  async function init() {
-    let data;
-    try {
-      const res = await fetch('../data/missing9.json');
-      if (!res.ok) throw 0;
-      data = await res.json();
-    } catch(e) {
-      el.matchTheme.textContent = '데이터를 불러오지 못했어요';
-      return;
-    }
-    const games = data.games || [];
-    if (!games.length) { el.matchTheme.textContent = '경기가 없어요'; return; }
+  let allGames = [];   // 전체 경기 목록 (data.games)
+  let todayIdx = 0;    // 오늘 날짜에 해당하는 인덱스 (NEXT의 상한선)
 
-    const idx = kstDayIndex();
-    if (idx < 0 || idx >= games.length) {
-      el.matchTheme.textContent = '오늘의 경기가 아직 준비되지 않았어요';
-      el.fieldWrap.hidden = true;
-      return;
-    }
+  function loadGame(idx) {
+    if (idx < 0 || idx >= allGames.length) return;
+
+    // 진행 중이던 워들 화면이 열려있으면 정리
+    activeIdx = -1;
+    curInput = [];
+    over = false;
+    el.now.hidden = true;
+    el.wordle.hidden = true;
+    el.actions.hidden = true;
+    el.tmi.hidden = true;
+    el.sharebox.hidden = true;
+    el.share.hidden = true;
+
     gameNo = idx + 1;
-    game = games[idx];
+    game = allGames[idx];
 
-    // 구단 컬러 적용
+    // 구단 컬러 적용 (매핑에 없으면 기본 색 유지)
     const teamKey = TEAM_KEY[game.game_team];
     if (teamKey) {
       document.documentElement.style.setProperty('--accent', TEAM_COLOR[teamKey]);
       document.documentElement.style.setProperty('--accent-dk', TEAM_COLOR_SUB1[teamKey]);
       document.documentElement.style.setProperty('--accent-lt', TEAM_COLOR_SUB2[teamKey]);
-
     }
 
     // 라인업 상태 구성
     lineup = game.lineup.map(p => {
-      const jm = nameToJamo(p.name);           // [{ch,jamo:[...]}]
-      const flat = jm.flatMap(x => x.jamo);     // 자모 1차원
+      const jm = nameToJamo(p.name);
+      const flat = jm.flatMap(x => x.jamo);
       return {
         ...p,
         answerJamo: flat,
@@ -726,18 +731,53 @@
     el.matchMeta.innerHTML =
       `${game.date} · <span class="home">${game.home_team} ${game.home_score}</span> vs <span class="score">${game.away_score} ${game.away_team}</span>`;
 
-    // 복원
-    const saved = load();
+    // PREV/NEXT 버튼 활성/비활성 표시
+    el.navPrev.disabled = (idx <= 0);
+    el.navNext.disabled = (idx >= todayIdx);
+
+    // 이 경기의 저장된 진행상황 복원
+    const saved = load(gameNo);
     if (saved) {
       saved.lineup.forEach(sv => {
         const s = lineup.find(x => x.order === sv.order);
         if (s) { s.status = sv.status; s.tries = sv.tries || []; s.preview = sv.preview || ''; }
       });
-      if (lineup.every(s => s.status==='solved'||s.status==='failed')) { endGame(); return; }
+      if (lineup.every(s => s.status==='solved'||s.status==='failed')) {
+        endGame();
+        return;
+      }
     }
 
+    el.fieldWrap.hidden = false;
+    el.howto.hidden = false;
     renderField();
     renderProgress();
+  }
+
+  async function init() {
+    let data;
+    try {
+      const res = await fetch('../data/missing9.json');
+      if (!res.ok) throw 0;
+      data = await res.json();
+    } catch(e) {
+      el.matchTheme.textContent = '데이터를 불러오지 못했어요';
+      return;
+    }
+    allGames = data.games || [];
+    if (!allGames.length) { el.matchTheme.textContent = '경기가 없어요'; return; }
+
+    const idx = kstDayIndex();
+    // 오늘이 아직 1번 경기 전이면 0으로, 목록을 넘어서면 마지막 경기로 고정
+    todayIdx = Math.max(0, Math.min(idx, allGames.length - 1));
+
+    if (idx < 0) {
+      el.matchTheme.textContent = '오늘의 경기가 아직 준비되지 않았어요';
+      el.fieldWrap.hidden = true;
+      return;
+    }
+
+    loadGame(todayIdx);
   }
 
   init();
