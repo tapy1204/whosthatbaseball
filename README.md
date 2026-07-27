@@ -14,6 +14,10 @@ KBO(한국야구위원회) 선수 데이터를 기반으로 만든 야구 팬 �
 
 ```
 .
+├── index.html                             # 메인 화면 (게임 허브, missing9/whoareya로 연결)
+├── style.css                              # 메인 화면 스타일
+├── README.md
+│
 ├── data/                                  # 전체 원본 데이터 (선수 크롤링 결과 + DB 스키마)
 │   ├── kbo_all_players_parsed.json        # 크롤링된 선수 전체 데이터
 │   └── kbo_player_schema.sql              # DB 스키마
