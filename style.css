@@ -1,99 +1,76 @@
+  html {
+    scroll-snap-type: y mandatory;
+  }
+
   body {
-    margin: 0;
+    margin: 0 auto;
+    max-width: 480px;
+    box-sizing: border-box;
+    padding: 10px;
     background-color: rgb(30, 30, 33);
     color: #ffffff;
-    font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+  }
+
+  .snap-section {
+    min-height: 100vh;
+    box-sizing: border-box;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .rule-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   header {
     text-align: center;
-    padding: 32px 16px;
+    padding: 18px 0;
   }
 
   header h1 {
     margin: 0;
-    font-size: 40px;
-    letter-spacing: 0.8px;
+    font-size: 32px;
+    letter-spacing: 0.4px;
     font-weight: 800;
-  }
-
-  .month {
-    width: 800px;
-    max-width: 90%;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 18px;
-    font-size: 28px;
-    font-weight: 700;
-    opacity: 0.85;
-    padding-bottom: 12px;
-  }
-
-  .week-switcher {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 18px;
-  }
-
-  #week {
-    text-align: right;
-  }
-
-  .week-nav {
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: inherit;
-    font-family: inherit;
-    font-weight: inherit;
-    cursor: pointer;
-    padding: 0 4px;
-  }
-
-  .week-nav:disabled {
-    opacity: 0.3;
-    cursor: default;
+    white-space: nowrap;
   }
 
   .calendar {
-    width: 800px;
-    max-width: 90%;
-    margin: 0 auto;
+    width: 100%;
     display: flex;
+    font-family: 'Anton', sans-serif;
     justify-content: space-between;
-    gap: 6px;
+    gap: auto;
   }
 
   .calendar .day {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius:26%;
-    gap: 4px;
-    width: 70px;
-    padding: 12px 0 4px;
+    border-radius: 22%;
+    padding: 12px 12px 4px;
     cursor: pointer;
   }
 
   .calendar .day.selected {
-    background-color: rgba(255, 255, 255, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .calendar .day-label {
-    font-size: 16px;
+    font-size: 14px;
     opacity: 0.6;
-    line-height: 1;
   }
 
   .calendar .date-num {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
+    border-radius: 20%;
+    font-size: 26px;
     opacity: 0.6;
     padding: 3px 0 0 1px;
     box-sizing: border-box;
@@ -101,7 +78,7 @@
   }
 
   .calendar .day.today{
-    color: #3be06a;
+    color: #ffffff;
   }
 
   .calendar .day.today .day-label {
@@ -113,12 +90,11 @@
   }
 
   .status-card {
-    width: 800px;
-    max-width: 90%;
-    margin: 24px auto 0;
+    width: 100%;
+    margin: 24px 0 0;
     background-color: #2a2a2e;
     border-radius: 24px;
-    padding: 40px 40px 32px;
+    padding: 24px 24px 16px;
     border: 1px solid rgba(90, 84, 84, 0.3);
     box-sizing: border-box;
   }
@@ -138,14 +114,14 @@
   }
 
   .status-card-no .no-label {
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 12px;
+    font-weight: 500;
     opacity: 0.5;
   }
 
   .status-card-no .no-number {
-    font-size: 44px;
-    font-weight: 800;
+    font-size: 32px;
+    font-weight: 700;
     line-height: 1;
   }
 
@@ -176,6 +152,7 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    padding: 5px 0 0;
     gap: 16px;
   }
 
@@ -211,7 +188,7 @@
     color: #ffffff;
     border: none;
     border-radius: 999px;
-    padding: 14px 22px;
+    padding: 10px 20px;
     font-size: 16px;
     font-weight: 700;
     font-family: inherit;
@@ -222,9 +199,8 @@
   }
 
   .games-section {
-    width: 800px;
-    max-width: 90%;
-    margin: 20px auto;
+    width: 100%;
+    margin: 20px 0;
   }
 
   .games-header {
@@ -254,8 +230,8 @@
   }
 
   .game-card {
-    flex: 0 0 220px;
-    height: 190px;
+    flex: 0 0 160px;
+    height: 240px;
     border-radius: 24px;
     padding: 24px 24px 28px;
     display: flex;
@@ -313,9 +289,8 @@
   }
 
   .rule-card {
-    width: 800px;
-    max-width: 90%;
-    margin: 24px auto;
+    width: 100%;
+    margin: 24px 0;
   }
 
   .rule-title-chip {
@@ -368,25 +343,3 @@
     font-size: 18px;
     line-height: 1.5;
   }
-
-  @media (max-width: 600px) { /* 모바일 */
-    header { text-align: left; }
-    header { padding: 32px 50px; }
-    header h1 { font-size: 50px; }
-    header h1 { font-weight: 800; }
-    header h1 .line2 { display: block; }
-    header h1 .line3 { display: block; }
-    .month { justify-content: flex-start; padding: 0 50px 9px;}
-    #month { font-size: 27px; }
-    #week { font-size: 18px; }
-    .calendar { width: 320px; gap: 12px; padding: 0 50px 12px; }
-    .calendar .day { gap: 0px; width: 60px; }
-    .calendar .day-label { font-size: 14px; }
-    .calendar .date-num {
-    border-radius: 20%;
-    font-size: 30px;
-    }
-    .status-card { margin: 24px 50px 0; padding : 24px 24px 16px; }
-    .games-section { padding: 0 50px; }
-  }
-  
