@@ -1,8 +1,27 @@
+  html {
+    scroll-snap-type: y mandatory;
+  }
+
   body {
     margin: 0;
+    max-width: 480px;
+    align-items: center;
     background-color: rgb(30, 30, 33);
     color: #ffffff;
     font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+  }
+
+  .snap-section {
+    min-height: 100vh;
+    box-sizing: border-box;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .rule-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   header {
