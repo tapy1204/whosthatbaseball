@@ -72,6 +72,7 @@
 
   <!-- 공유 버튼 -->
   <div class="share" id="share" hidden>
+    <button class="btn btn-retry" type="button" id="btnRetry">↻ 다시 도전</button>
     <button class="btn btn-kakao" type="button" id="btnKakao"><span class="kakao-mark">K</span> 카카오톡</button>
     <button class="btn btn-ghost" type="button" id="btnCopy">결과 공유</button>
   </div>
@@ -227,7 +228,7 @@
     progress:$('progress'),
     tmi:$('tmi'), tmiTheme:$('tmiTheme'), tmiBody:$('tmiBody'),
     sharebox:$('sharebox'), shareLabel:$('shareLabel'), shareCnt:$('shareCnt'), emojiBar:$('emojiBar'),
-    share:$('share'), btnKakao:$('btnKakao'), btnCopy:$('btnCopy'),
+    share:$('share'), btnRetry:$('btnRetry'), btnKakao:$('btnKakao'), btnCopy:$('btnCopy'),
     howto:$('howto'), actions:$('actions'), btnBack:$('btnBack'), btnGiveup:$('btnGiveup'),
     navNo:$('navNo'), toast:$('toast'),
   };
@@ -609,6 +610,32 @@
   }
 
   // ── 이벤트 ────────────────────────────
+  // ── 재도전 ────────────────────────────
+  function resetGame() {
+    over = false;
+    activeIdx = -1;
+    curInput = [];
+    lineup.forEach(s => {
+      s.status = 'idle';
+      s.tries = [];
+      s.preview = '';
+    });
+
+    el.tmi.hidden = true;
+    el.sharebox.hidden = true;
+    el.share.hidden = true;
+    el.howto.hidden = false;
+    el.now.hidden = true;
+    el.wordle.hidden = true;
+    el.fieldWrap.hidden = false;
+    el.actions.hidden = true;
+
+    save();
+    renderField();
+    renderProgress();
+  }
+
+  el.btnRetry.addEventListener('click', resetGame);
   el.btnBack.addEventListener('click', closeWordle);
   el.btnGiveup.addEventListener('click', () => {
     const s = lineup[activeIdx];
