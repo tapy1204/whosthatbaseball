@@ -52,11 +52,14 @@ CREATE TABLE players (
     debut_year           INT,                     -- 입단년도
     is_active           BOOLEAN NOT NULL DEFAULT TRUE,  -- 현역여부 O/X
     position_primary    position_type,            -- 주 포지션 (여러 포지션 소화 시 player_positions 참고)
+    position_detail_raw VARCHAR(30),               -- 크롤링 원문 (예: "내야수", "포수(우투우타)") -- UTIL로 뭉개지는 세부 정보 보존용
     throwing_hand       hand_type,                -- 투구 방향
     batting_hand        hand_type,                -- 타격 방향
     school_id           INT REFERENCES schools(school_id),
     current_team_id     INT REFERENCES teams(team_id),  -- 현재(혹은 마지막) 소속 팀 캐시
     last_jersey_number   INT,                      -- 마지막 등번호 (캐시, 실제 이력은 아래 테이블)
+    height_cm           INT,                       -- 신장 (크롤링 시 "178cm/81kg"에서 파싱)
+    weight_kg           INT,                       -- 체중
 
     -- 크롤링 메타데이터
     source_url          TEXT,
@@ -108,6 +111,7 @@ CREATE TABLE draft_records (
     parsed_round     INT,
     parsed_pick      INT,
     parsed_team_id   INT REFERENCES teams(team_id),
+    signing_bonus_10k_won  INT,   -- 입단 계약금 (단위: 만원). 드래프트/입단 시 1회성 금액이라 여기 같이 저장
 
     source_url      TEXT,
     crawled_at      TIMESTAMPTZ
@@ -116,14 +120,38 @@ CREATE TABLE draft_records (
 CREATE INDEX idx_draft_player ON draft_records(player_id);
 
 -- ---------------------------------------------------------
+-- 5b. 선수 연봉 이력 (연도별로 바뀌는 값이라 별도 테이블로 분리)
+-- ---------------------------------------------------------
+CREATE TABLE player_salaries (
+    id              SERIAL PRIMARY KEY,
+    player_id       INT NOT NULL REFERENCES players(player_id) ON DELETE CASCADE,
+    year            INT NOT NULL,           -- 크롤링 시점 기준 연도 (예: 2026년에 크롤링했으면 2026)
+    salary_10k_won  INT,                    -- 연봉 (단위: 만원)
+    source_url      TEXT,
+    crawled_at      TIMESTAMPTZ,
+
+    CONSTRAINT uq_player_salary_year UNIQUE (player_id, year)  -- 같은 해 연봉 중복 저장 방지
+);
+
+CREATE INDEX idx_salary_player ON player_salaries(player_id);
+
+-- ---------------------------------------------------------
 -- 6. 구단별 연도별 감독 이력
+--    한 해에 감독이 여러 번 바뀌어도(시즌 중 경질 등), 같은 연도값을 가진 row가
+--    여러 개 들어가는 것을 허용 -> 순서/겹침을 DB가 강제로 막지는 않음 (단순 연 단위 기록용)
 -- ---------------------------------------------------------
 CREATE TABLE team_managers (
     id              SERIAL PRIMARY KEY,
     team_id         INT NOT NULL REFERENCES teams(team_id),
     manager_name    VARCHAR(30) NOT NULL,
     start_year      INT NOT NULL,
-    end_year        INT,
+    end_year        INT,             -- NULL = 현재 재임 중
+    is_interim      BOOLEAN NOT NULL DEFAULT FALSE,  -- 감독대행 여부
+    reason          VARCHAR(50),      -- 경질 / 사임 / 계약만료 / 시즌종료 등 (크롤링되면 채움)
+
+    source_url      TEXT,
+    crawled_at      TIMESTAMPTZ,
+
     CONSTRAINT ck_manager_year CHECK (end_year IS NULL OR end_year >= start_year)
 );
 
@@ -146,13 +174,16 @@ CREATE TABLE player_awards (
     year            INT NOT NULL,
     detail          VARCHAR(200),  -- 세부사항 (예: 골든글러브 '유격수 부문', 완봉 '3회', 20-20 '25홈런-32도루' 등)
     source_url      TEXT,
-    crawled_at      TIMESTAMPTZ,
-
-    CONSTRAINT uq_player_award UNIQUE (player_id, award_type_id, year, detail)
+    crawled_at      TIMESTAMPTZ
 );
 
 CREATE INDEX idx_award_player ON player_awards(player_id);
 CREATE INDEX idx_award_type_year ON player_awards(award_type_id, year);
+
+-- 주의: UNIQUE 제약을 detail 컬럼에 그대로 걸면 안 됨 -> PostgreSQL은 NULL을 항상 "서로 다른 값"으로
+-- 취급해서, detail이 NULL인 기록(MVP/신인상처럼 세부내용이 없는 경우)은 몇 번을 다시 넣어도
+-- 중복으로 안 걸리고 계속 쌓임. COALESCE로 NULL을 빈 문자열 취급하는 표현식 인덱스를 써야 함.
+CREATE UNIQUE INDEX uq_player_award_idx ON player_awards (player_id, award_type_id, year, COALESCE(detail, ''));
 
 -- ---------------------------------------------------------
 -- 8. (선택) 크롤링 원본 스테이징 테이블
