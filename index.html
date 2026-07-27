@@ -13,14 +13,6 @@
     <h1>Who's <span class="line2">That</span> <span class="line3">Baseball</span></h1>
   </header>
 
-  <div class="month">
-    <span id="month"></span>
-    <div class="week-switcher">
-      <button class="week-nav" id="prevWeek" aria-label="이전 주">&lt;</button>
-      <span id="week"></span>
-      <button class="week-nav" id="nextWeek" aria-label="다음 주">&gt;</button>
-    </div>
-  </div>
   <div class="calendar" id="calendar"></div>
 
   <div class="status-card">
@@ -158,73 +150,37 @@
   </section>
 
   <script>
-    const dayLabels = ['월', '화', '수', '목', '금', '토', '일'];
-    const monthEl = document.getElementById('month');
-    const weekEl = document.getElementById('week');
+    const dayLabels = ['일', '월', '화', '수', '목', '금', '토']; // Date.getDay() 인덱스 순서
     const calendarEl = document.getElementById('calendar');
-    const prevWeekBtn = document.getElementById('prevWeek');
-    const nextWeekBtn = document.getElementById('nextWeek');
 
-    const realToday = new Date();
-    const realTodayStr = realToday.toDateString();
+    const today = new Date();
+    const todayStr = today.toDateString();
+    let selectedDateStr = todayStr; // 처음 진입 시 오늘 날짜가 기본 선택
 
-    let weekOffset = 0; // 0 = 이번 주, 음수 = 과거 주
-    let selectedDateStr = realTodayStr; // 처음 진입 시 오늘 날짜가 기본 선택
-
-    function renderWeek(offset) {
-      const base = new Date(realToday);
-      base.setDate(base.getDate() + offset * 7);
-      const baseIndex = (base.getDay() + 6) % 7; // 월=0 ... 일=6
-      const monday = new Date(base);
-      monday.setDate(base.getDate() - baseIndex);
-
-      const thursday = new Date(monday);
-      thursday.setDate(monday.getDate() + 3);
-
-      // 목요일 기준 몇 번째 주인지: 같은 달의 목요일들은 항상 7일 간격이므로
-      // 날짜를 7일 단위로 묶으면 몇 일에 시작하든 첫 주는 항상 1주차가 됨
-      const weekOfMonth = Math.floor((thursday.getDate() - 1) / 7) + 1;
-
-      monthEl.textContent = `${thursday.getFullYear()}년 ${thursday.getMonth() + 1}월`;
-      weekEl.textContent = `${weekOfMonth}주차`;
-
+    function renderCalendar() {
       calendarEl.innerHTML = '';
-      for (let i = 0; i < 7; i++) {
-        const d = new Date(monday);
-        d.setDate(monday.getDate() + i);
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(today);
+        d.setDate(today.getDate() - i);
         const dateStr = d.toDateString();
-        const isToday = dateStr === realTodayStr;
+        const isToday = dateStr === todayStr;
         const isSelected = dateStr === selectedDateStr;
 
         const dayEl = document.createElement('div');
         dayEl.className = 'day' + (isToday ? ' today' : '') + (isSelected ? ' selected' : '');
         dayEl.innerHTML = `
-          <span class="day-label">${dayLabels[i]}</span>
+          <span class="day-label">${dayLabels[d.getDay()]}</span>
           <span class="date-num">${String(d.getDate()).padStart(2, '0')}</span>
         `;
         dayEl.addEventListener('click', () => {
           selectedDateStr = dateStr;
-          renderWeek(weekOffset);
+          renderCalendar();
         });
         calendarEl.appendChild(dayEl);
       }
-
-      nextWeekBtn.disabled = offset >= 0;
     }
 
-    prevWeekBtn.addEventListener('click', () => {
-      weekOffset -= 1;
-      renderWeek(weekOffset);
-    });
-
-    nextWeekBtn.addEventListener('click', () => {
-      if (weekOffset < 0) {
-        weekOffset += 1;
-        renderWeek(weekOffset);
-      }
-    });
-
-    renderWeek(weekOffset);
+    renderCalendar();
   </script>
 </body>
 </html>
