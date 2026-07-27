@@ -29,7 +29,6 @@
   <div class="now" id="now" hidden>
     <div class="now-badge">
       <span class="now-order" id="nowOrder">3</span>
-      <span id="nowNumber">36</span>
     </div>
     <div class="now-info">
       <div class="now-role" id="nowRole">3번 타자 · 지명타자</div>
@@ -81,8 +80,8 @@
   <section class="howto" id="howto">
     <h3 class="howto-title">게임 방법</h3>
     <div class="howto-line">
-      <span class="howto-mini"><span class="m-order">4</span>7</span>
-      <span><b>등번호</b> · 검은 배지는 <span class="accent">타순</span></span>
+      <span class="howto-mini"><span class="m-order">4</span></span>
+      <span><b>타순</b> · 배지 숫자는 그 선수의 타순이에요</span>
     </div>
     <div class="howto-line">
       <span class="howto-stat-ic" aria-label="타점">
@@ -222,7 +221,7 @@
   const $ = id => document.getElementById(id);
   const el = {
     matchNo:$('matchNo'), matchTheme:$('matchTheme'), matchMeta:$('matchMeta'),
-    now:$('now'), nowOrder:$('nowOrder'), nowNumber:$('nowNumber'), nowRole:$('nowRole'), nowTry:$('nowTry'),
+    now:$('now'), nowOrder:$('nowOrder'), nowRole:$('nowRole'), nowTry:$('nowTry'),
     wordle:$('wordle'), wdGrid:$('wdGrid'), kbd:$('kbd'),
     fieldWrap:$('fieldWrap'), field:$('field'),
     progress:$('progress'),
@@ -278,7 +277,7 @@
       // 유니폼
       const jersey = document.createElement('div');
       jersey.className = 'slot-jersey';
-      jersey.innerHTML = `<span class="slot-order">${s.order}</span>${s.number ?? ''}`;
+      jersey.innerHTML = `<span class="slot-order">${s.order}</span>`;
       slot.appendChild(jersey);
 
       // 이름표 / 진행 프리뷰 / 빈칸
@@ -336,7 +335,6 @@
 
     el.now.hidden = false;
     el.nowOrder.textContent = s.order;
-    el.nowNumber.textContent = s.number ?? '';
     el.nowRole.textContent = `${s.order}번 타자 · ${POS_LABEL[s.position] || s.position}`;
 
     el.wordle.hidden = false;
