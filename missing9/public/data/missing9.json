@@ -1679,6 +1679,29 @@
           "sb": 0
         }
       ]
+    },
+    {
+      "id": "m24",
+      "theme": "2008 베이징 올림픽 야구 금메달 결정전 (한국 vs 쿠바)",
+      "date": "2008.8.23",
+      "game_team": "대한민국",
+      "home_team": "대한민국",
+      "home_score": 3,
+      "away_team": "쿠바",
+      "away_score": 2,
+      "tmi": "정대현이 마지막 타자 율리에스키 구리엘을 상대로 유격수 병살타를 유도하며 경기를 끝냈다. 한국 야구 사상 최초의 올림픽 금메달이자, 9전 전승 우승이었다.",
+      "lineup": [
+        {"order": 1, "position": "중", "name": "이종욱", "rbi": 0, "sb": 0},
+        {"order": 2, "position": "우", "name": "이용규", "rbi": 1, "sb": 0},
+        {"order": 3, "position": "좌", "name": "김현수", "rbi": 0, "sb": 0},
+        {"order": 4, "position": "-", "name": "이승엽", "rbi": 2, "sb": 0},
+        {"order": 5, "position": "三", "name": "김동주", "rbi": 0, "sb": 0},
+        {"order": 6, "position": "지", "name": "이대호", "rbi": 0, "sb": 0},
+        {"order": 7, "position": "二", "name": "고영민", "rbi": 0, "sb": 0},
+        {"order": 8, "position": "포", "name": "강민호", "rbi": 0, "sb": 0},
+        {"order": 9, "position": "유", "name": "박진만", "rbi": 0, "sb": 0},
+        {"order": "SP", "position": "투", "name": "류현진", "rbi": 0, "sb": 0}
+      ]
     }
   ]
 }
