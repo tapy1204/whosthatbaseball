@@ -1,3 +1,5 @@
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;700;900&display=swap');
+
   html {
     scroll-snap-type: y mandatory;
   }
@@ -31,18 +33,20 @@
   }
 
   header h1 {
-    margin: 0;
-    font-size: 32px;
-    letter-spacing: 0.4px;
-    font-weight: 800;
+    margin: 10px 0 0;
+    font-family: 'Anton', sans-serif;
+    font-size: 30px;
+    font-weight: 300;
+    letter-spacing: 0.01em;
     white-space: nowrap;
   }
 
   .calendar {
     width: 100%;
+    box-sizing: border-box;
     display: flex;
-    font-family: 'Anton', sans-serif;
     justify-content: space-between;
+    padding: 0 8px 0;
     gap: auto;
   }
 
@@ -53,16 +57,19 @@
     border-radius: 22%;
     padding: 12px 12px 4px;
     cursor: pointer;
+    font-weight: 700;
   }
 
   .calendar .day.selected {
     background-color: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    font-weight: 900;
   }
 
   .calendar .day-label {
     font-size: 14px;
     opacity: 0.6;
+    font-weight: 300;
   }
 
   .calendar .date-num {
@@ -70,23 +77,30 @@
     align-items: center;
     justify-content: center;
     border-radius: 20%;
+    font-family: 'Oswald', sans-serif;
     font-size: 26px;
-    opacity: 0.6;
+    font-weight: 700;
+    opacity: 0.4;
     padding: 3px 0 0 1px;
     box-sizing: border-box;
-    font-weight: 700;
   }
 
-  .calendar .day.today{
-    color: #ffffff;
+  .calendar .day.selected .day-label{
+    opacity: 1;
+  }
+
+  .calendar .day.selected .date-num{
+    opacity: 1;
   }
 
   .calendar .day.today .day-label {
     opacity: 1;
+    color: #fd7b4c;
   }
 
   .calendar .day.today .date-num {
     opacity: 1;
+    color: #fd7b4c;
   }
 
   .status-card {
@@ -120,7 +134,8 @@
   }
 
   .status-card-no .no-number {
-    font-size: 32px;
+    font-size: 26px;
+    font-family: 'Oswald', sans-serif;
     font-weight: 700;
     line-height: 1;
   }
@@ -211,7 +226,7 @@
   }
 
   .games-header h2 {
-    margin: 0;
+    margin: 0 15px 0;
     font-size: 28px;
     font-weight: 800;
   }
