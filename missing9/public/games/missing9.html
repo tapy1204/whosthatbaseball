@@ -141,12 +141,13 @@
     5: { x: 76, y: 60 },   // 1루 (우)
     3: { x: 16, y: 80 },   // 지명 (좌하)
     9: { x: 50, y: 82 },   // 포수 (하단 중앙)
+    'SP': { x: 50, y: 50 }, // 투수 (마운드 중앙, 국가대표전 등 예외 라인업용)
   };
 
   // 팀 한글명 → 영어 키 매핑
   const TEAM_KEY = {
     'LG': 'lg', '한화': 'hanwha', 'SSG': 'ssg', '삼성': 'samsung', 'NC': 'nc',
-    'kt': 'kt', '롯데': 'lotte', 'KIA': 'kia', '두산': 'doosan', '키움': 'kiwoom',
+    'kt': 'kt', 'KT': 'kt', '롯데': 'lotte', 'KIA': 'kia', '두산': 'doosan', '키움': 'kiwoom',
   };
   // 영어 키 → CSS 변수 참조
   const TEAM_COLOR = {
@@ -241,7 +242,7 @@
     return Math.floor((m - EPOCH) / 86400000);
   }
 
-  const POS_LABEL = { '좌':'좌익수','우':'우익수','중':'중견수','一':'1루수','二':'2루수','三':'3루수','유':'유격수','포':'포수','지':'지명타자' };
+  const POS_LABEL = { '좌':'좌익수','우':'우익수','중':'중견수','-':'1루수','二':'2루수','三':'3루수','유':'유격수','포':'포수','지':'지명타자','투':'투수' };
 
   // ── 워들 판정 ─────────────────────────
   // 정답 자모 시퀀스와 입력 자모 시퀀스 비교 (위치별 g/y/x)
@@ -277,7 +278,7 @@
       // 유니폼
       const jersey = document.createElement('div');
       jersey.className = 'slot-jersey';
-      jersey.innerHTML = `<span class="slot-order">${s.order}</span>${s.number}`;
+      jersey.innerHTML = `<span class="slot-order">${s.order}</span>${s.number ?? ''}`;
       slot.appendChild(jersey);
 
       // 이름표 / 진행 프리뷰 / 빈칸
@@ -335,7 +336,7 @@
 
     el.now.hidden = false;
     el.nowOrder.textContent = s.order;
-    el.nowNumber.textContent = s.number;
+    el.nowNumber.textContent = s.number ?? '';
     el.nowRole.textContent = `${s.order}번 타자 · ${POS_LABEL[s.position] || s.position}`;
 
     el.wordle.hidden = false;
