@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MISSING9 — Who's That Baseball</title>
+<meta name="description" content="KBO 역사에 남은 그 경기, 9명의 타자를 찾아보세요.">
+<link rel="stylesheet" href="missing9-style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- 헤더 -->
+  <header class="hdr">
+    <button class="hdr-btn" type="button" aria-label="메뉴"><span class="hamburger"></span></button>
+    <h1 class="hdr-title" id="devReset" style="cursor:pointer">MISSING9</h1>
+    <button class="hdr-btn" type="button" aria-label="통계"><span class="stats-icon"><i></i><i></i><i></i></span></button>
+  </header>
+
+  <!-- 경기 정보 -->
+  <section class="matchbar">
+    <div class="matchbar-no" id="matchNo">#001</div>
+    <div class="matchbar-theme" id="matchTheme">—</div>
+    <div class="matchbar-meta" id="matchMeta"></div>
+  </section>
+
+  <!-- 현재 입력 중인 선수 (워들 화면에서만) -->
+  <div class="now" id="now" hidden>
+    <div class="now-badge">
+      <span class="now-order" id="nowOrder">3</span>
+      <span id="nowNumber">36</span>
+    </div>
+    <div class="now-info">
+      <div class="now-role" id="nowRole">3번 타자 · 지명타자</div>
+      <div class="now-try" id="nowTry">이름을 맞혀보세요 · 시도 1 / 6</div>
+    </div>
+  </div>
+
+  <!-- 워들 입력 영역 -->
+  <section class="wordle" id="wordle" hidden>
+    <div class="wd-grid" id="wdGrid"></div>
+    <div class="kbd" id="kbd"></div>
+  </section>
+
+  <!-- 야구장 -->
+  <div class="field-wrap" id="fieldWrap">
+    <div class="field" id="field">
+      <div class="diamond"></div>
+      <div class="mound"></div>
+      <div class="foul"></div>
+      <!-- 진행 상황 -->
+      <div class="progress" id="progress" hidden></div>
+      <!-- 선수 슬롯은 JS가 채움 -->
+    </div>
+  </div>
+
+
+  <!-- 결과: 이모지 공유바 -->
+  <section class="sharebox" id="sharebox" hidden>
+    <div class="sharebox-head">
+      <span id="shareLabel">MISSING9 #001</span>
+      <span class="cnt" id="shareCnt">0/9</span>
+    </div>
+    <div class="emoji-bar" id="emojiBar"></div>
+  </section>
+
+  <!-- 결과: TMI -->
+  <section class="tmi" id="tmi" hidden>
+    <div class="tmi-title"><span class="lbl">TMI</span> <span id="tmiTheme"></span></div>
+    <div class="tmi-body" id="tmiBody"></div>
+  </section>
+
+  <!-- 공유 버튼 -->
+  <div class="share" id="share" hidden>
+    <button class="btn btn-kakao" type="button" id="btnKakao"><span class="kakao-mark">K</span> 카카오톡</button>
+    <button class="btn btn-ghost" type="button" id="btnCopy">결과 공유</button>
+  </div>
+
+  <!-- 게임 방법 -->
+  <section class="howto" id="howto">
+    <h3 class="howto-title">게임 방법</h3>
+    <div class="howto-line">
+      <span class="howto-mini"><span class="m-order">4</span>7</span>
+      <span><b>등번호</b> · 검은 배지는 <span class="accent">타순</span></span>
+    </div>
+    <div class="howto-line">
+      <span class="howto-stat-ic" aria-label="타점">
+        <img src="../image/배트.png" alt="타점">
+      </span>
+      <span><b>타점</b> · 이 경기에서 낸 타점 수</span>
+    </div>
+    <div class="howto-line">
+      <span class="howto-stat-ic" aria-label="도루">
+        <img src="../image/도루.png" alt="도루">
+      </span>
+      <span><b>도루</b> · 이 경기에서 성공한 도루 수</span>
+    </div>
+    <div class="howto-div"></div>
+    <div class="legend-row"><span class="legend-sq g"></span> 자리·글자 모두 정확</div>
+    <div class="legend-row"><span class="legend-sq y"></span> 이름에 있지만 자리가 다름</div>
+    <div class="legend-row"><span class="legend-sq x"></span> 이름에 없는 글자</div>
+  </section>
+  
+
+  <!-- 하단 액션 (워들 화면) -->
+  <div class="actions" id="actions" hidden>
+    <button class="act-btn" type="button" id="btnGiveup">Give Up</button>
+    <button class="act-btn" type="button" id="btnBack">Back</button>
+  </div>
+
+  <!-- 하단 네비 -->
+  <nav class="nav">
+    <button class="nav-btn" type="button" id="navPrev">◄ PREV</button>
+    <span class="nav-no" id="navNo">#001</span>
+    <button class="nav-btn" type="button" id="navNext">NEXT ►</button>
+  </nav>
+
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  // ── 설정 ──────────────────────────────
+  const MAX_TRIES = 6;
+  const STORE_KEY = 'wtb_missing9';
+  const EPOCH     = Date.UTC(2026, 6, 27);
+  const SITE_URL  = 'whosthatbaseball.com';
+
+  // 그라운드 슬롯 좌표 (타순 1~9 → % 위치)
+  const SLOT_POS = {
+    7: { x: 50, y: 15 },   // 중견수 (맨 위 중앙)
+    1: { x: 22, y: 26 },   // 좌익수
+    2: { x: 78, y: 26 },   // 우익수
+    8: { x: 38, y: 42 },   // 유격 (다이아 좌상)
+    6: { x: 62, y: 42 },   // 2루 (다이아 우상)
+    4: { x: 24, y: 60 },   // 3루 (좌)
+    5: { x: 76, y: 60 },   // 1루 (우)
+    3: { x: 16, y: 80 },   // 지명 (좌하)
+    9: { x: 50, y: 82 },   // 포수 (하단 중앙)
+  };
+
+  // 팀 한글명 → 영어 키 매핑
+  const TEAM_KEY = {
+    'LG': 'lg', '한화': 'hanwha', 'SSG': 'ssg', '삼성': 'samsung', 'NC': 'nc',
+    'kt': 'kt', '롯데': 'lotte', 'KIA': 'kia', '두산': 'doosan', '키움': 'kiwoom',
+  };
+  // 영어 키 → CSS 변수 참조
+  const TEAM_COLOR = {
+    lg: 'var(--team-lg)', hanwha: 'var(--team-hanwha)', ssg: 'var(--team-ssg)',
+    samsung: 'var(--team-samsung)', nc: 'var(--team-nc)', kt: 'var(--team-kt)',
+    lotte: 'var(--team-lotte)', kia: 'var(--team-kia)', doosan: 'var(--team-doosan)',
+    kiwoom: 'var(--team-kiwoom)',
+  };
+  const TEAM_COLOR_SUB1 = {
+    lg: 'var(--team-lg-sub1)', hanwha: 'var(--team-hanwha-sub1)', ssg: 'var(--team-ssg-sub1)',
+    samsung: 'var(--team-samsung-sub1)', nc: 'var(--team-nc-sub1)', kt: 'var(--team-kt-sub1)',
+    lotte: 'var(--team-lotte-sub1)', kia: 'var(--team-kia-sub1)', doosan: 'var(--team-doosan-sub1)',
+    kiwoom: 'var(--team-kiwoom-sub1)',
+  };
+  const TEAM_COLOR_SUB2 = {
+  lg: 'var(--team-lg-sub2)', hanwha: 'var(--team-hanwha-sub2)', ssg: 'var(--team-ssg-sub2)',
+  samsung: 'var(--team-samsung-sub2)', nc: 'var(--team-nc-sub2)', kt: 'var(--team-kt-sub2)',
+  lotte: 'var(--team-lotte-sub2)', kia: 'var(--team-kia-sub2)', doosan: 'var(--team-doosan-sub2)',
+  kiwoom: 'var(--team-kiwoom-sub2)',
+  }; 
+
+  // ── 한글 자모 처리 ───────────────────
+  const CHO = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+  const JUNG = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
+  const JONG = ['','ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+
+  // 겹받침/복합모음 → 기본 자모 분해
+  const SPLIT = {
+    'ㄳ':['ㄱ','ㅅ'],'ㄵ':['ㄴ','ㅈ'],'ㄶ':['ㄴ','ㅎ'],'ㄺ':['ㄹ','ㄱ'],'ㄻ':['ㄹ','ㅁ'],
+    'ㄼ':['ㄹ','ㅂ'],'ㄽ':['ㄹ','ㅅ'],'ㄾ':['ㄹ','ㅌ'],'ㄿ':['ㄹ','ㅍ'],'ㅀ':['ㄹ','ㅎ'],'ㅄ':['ㅂ','ㅅ'],
+    'ㅘ':['ㅗ','ㅏ'],'ㅙ':['ㅗ','ㅐ'],'ㅚ':['ㅗ','ㅣ'],'ㅝ':['ㅜ','ㅓ'],'ㅞ':['ㅜ','ㅔ'],'ㅟ':['ㅜ','ㅣ'],'ㅢ':['ㅡ','ㅣ']
+  };
+
+  // 한 글자(음절)를 자모 배열로 분해
+  function decompose(ch) {
+    const code = ch.charCodeAt(0) - 0xAC00;
+    if (code < 0 || code > 11171) return [ch];
+    const cho = Math.floor(code / 588);
+    const jung = Math.floor((code % 588) / 28);
+    const jong = code % 28;
+
+    let arr = [CHO[cho]];
+
+    // 중성(모음) — 겹모음(ㅘㅙㅚㅝㅞㅟㅢ)이면 SPLIT으로 2칸으로 쪼갬
+    const jungJamo = JUNG[jung];
+    arr.push(...(SPLIT[jungJamo] || [jungJamo]));
+
+    // 종성(받침) — 겹받침(ㄳㄵㄶㄺㄻㄼㄽㄾㄿㅀㅄ)이면 SPLIT으로 2칸으로 쪼갬
+    if (jong > 0) {
+      const jongJamo = JONG[jong];
+      arr.push(...(SPLIT[jongJamo] || [jongJamo]));
+    }
+
+    return arr;
+  }
+
+  // 이름 전체 → [{ch, jamo:[...]}]
+  function nameToJamo(name) {
+    return [...name].map(ch => ({ ch, jamo: decompose(ch) }));
+  }
+
+  // ── 상태 ──────────────────────────────
+  let game = null;
+  let lineup = [];        // 슬롯별 상태
+  let activeIdx = -1;     // 현재 워들 중인 슬롯 index
+  let over = false;
+  let gameNo = 1;
+
+  // 워들 입력 임시
+  let curInput = [];      // 현재 시도의 자모 배열
+
+  const $ = id => document.getElementById(id);
+  const el = {
+    matchNo:$('matchNo'), matchTheme:$('matchTheme'), matchMeta:$('matchMeta'),
+    now:$('now'), nowOrder:$('nowOrder'), nowNumber:$('nowNumber'), nowRole:$('nowRole'), nowTry:$('nowTry'),
+    wordle:$('wordle'), wdGrid:$('wdGrid'), kbd:$('kbd'),
+    fieldWrap:$('fieldWrap'), field:$('field'),
+    progress:$('progress'),
+    tmi:$('tmi'), tmiTheme:$('tmiTheme'), tmiBody:$('tmiBody'),
+    sharebox:$('sharebox'), shareLabel:$('shareLabel'), shareCnt:$('shareCnt'), emojiBar:$('emojiBar'),
+    share:$('share'), btnKakao:$('btnKakao'), btnCopy:$('btnCopy'),
+    howto:$('howto'), actions:$('actions'), btnBack:$('btnBack'), btnGiveup:$('btnGiveup'),
+    navNo:$('navNo'), toast:$('toast'),
+  };
+
+  // ── 날짜(KST) ─────────────────────────
+  const kstNow = () => new Date(Date.now() + 9*3600*1000);
+  const kstDateStr = () => kstNow().toISOString().slice(0,10);
+  function kstDayIndex() {
+    const d = kstNow();
+    const m = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+    return Math.floor((m - EPOCH) / 86400000);
+  }
+
+  const POS_LABEL = { '좌':'좌익수','우':'우익수','중':'중견수','一':'1루수','二':'2루수','三':'3루수','유':'유격수','포':'포수','지':'지명타자' };
+
+  // ── 워들 판정 ─────────────────────────
+  // 정답 자모 시퀀스와 입력 자모 시퀀스 비교 (위치별 g/y/x)
+  function judgeJamo(answerJamo, inputJamo) {
+    const res = inputJamo.map(() => 'x');
+    const remain = {};
+    answerJamo.forEach((j, i) => {
+      if (inputJamo[i] === j) res[i] = 'g';
+      else remain[j] = (remain[j]||0) + 1;
+    });
+    inputJamo.forEach((j, i) => {
+      if (res[i] === 'g') return;
+      if (remain[j] > 0) { res[i] = 'y'; remain[j]--; }
+    });
+    return res;
+  }
+
+  // ── 렌더: 야구장 슬롯 ─────────────────
+  function renderField() {
+    // 기존 슬롯 제거 (다이아몬드/마운드는 유지)
+    [...el.field.querySelectorAll('.slot')].forEach(s => s.remove());
+
+    lineup.forEach((s, idx) => {
+      const pos = SLOT_POS[s.order];
+      const slot = document.createElement('div');
+      slot.className = 'slot' +
+        (s.status === 'solved' ? ' is-solved' :
+         s.status === 'failed' ? ' is-failed' :
+         s.status === 'progress' ? ' is-progress' : '');
+      slot.style.left = pos.x + '%';
+      slot.style.top = pos.y + '%';
+
+      // 유니폼
+      const jersey = document.createElement('div');
+      jersey.className = 'slot-jersey';
+      jersey.innerHTML = `<span class="slot-order">${s.order}</span>${s.number}`;
+      slot.appendChild(jersey);
+
+      // 이름표 / 진행 프리뷰 / 빈칸
+      if (s.status === 'solved' || s.status === 'failed') {
+        const nm = document.createElement('div');
+        nm.className = 'slot-name';
+        nm.textContent = s.name;
+        slot.appendChild(nm);
+      } else if (s.status === 'progress') {
+        const nm = document.createElement('div');
+        nm.className = 'slot-name';
+        nm.textContent = s.preview || '···';
+        slot.appendChild(nm);
+      } else {
+        const em = document.createElement('div');
+        em.className = 'slot-empty';
+        [...s.name].forEach(() => { const i=document.createElement('i'); em.appendChild(i); });
+        slot.appendChild(em);
+      }
+
+      // 타점/도루
+      if (s.rbi > 0 || s.sb > 0) {
+        const stat = document.createElement('div');
+        stat.className = 'slot-stat';
+        if (s.rbi > 0) stat.innerHTML += `<img src="../image/배트.png" alt="타점">${s.rbi}`;
+        if (s.sb > 0)  stat.innerHTML += `<img src="../image/도루.png" alt="도루">${s.sb}`;
+        jersey.appendChild(stat);
+      }
+
+      // 클릭 → 워들 열기 (미완료만)
+      if (s.status === 'idle' || s.status === 'progress') {
+        jersey.style.cursor = 'pointer';
+        jersey.addEventListener('click', () => openWordle(idx));
+      }
+
+      el.field.appendChild(slot);
+    });
+  }
+
+  // ── 진행 상황 ─────────────────────────
+  function renderProgress() {
+    const solved = lineup.filter(s => s.status === 'solved').length;
+    const prog = lineup.filter(s => s.status === 'progress').length;
+    el.progress.hidden = false;
+    el.progress.innerHTML = `<span class="done">${solved}</span>/9` +
+      (prog > 0 ? ` <span class="prog">· ${prog} 진행중</span>` : '');
+  }
+
+  // ── 워들 열기 ─────────────────────────
+  function openWordle(idx) {
+    if (over) return;
+    activeIdx = idx;
+    const s = lineup[idx];
+    curInput = [];
+
+    el.now.hidden = false;
+    el.nowOrder.textContent = s.order;
+    el.nowNumber.textContent = s.number;
+    el.nowRole.textContent = `${s.order}번 타자 · ${POS_LABEL[s.position] || s.position}`;
+
+    el.wordle.hidden = false;
+    el.fieldWrap.hidden = true;
+    el.progress.hidden = true;
+    el.howto.hidden = true;
+    el.matchTheme.parentElement.hidden = false;
+    el.actions.hidden = false;
+
+    buildKeyboard();
+    renderWordleGrid();
+    updateNowTry();
+  }
+
+  function closeWordle() {
+    activeIdx = -1;
+    el.now.hidden = true;
+    el.wordle.hidden = true;
+    el.fieldWrap.hidden = false;
+    el.howto.hidden = false;
+    el.actions.hidden = true;
+    renderField();
+    renderProgress();
+  }
+
+  function updateNowTry() {
+    const s = lineup[activeIdx];
+    el.nowTry.textContent = `이름을 맞혀보세요 · 시도 ${s.tries.length + 1} / ${MAX_TRIES}`;
+  }
+
+  // ── 워들 그리드 ───────────────────────
+  function renderWordleGrid() {
+    const s = lineup[activeIdx];
+    const cols = s.answerJamo.length;
+    el.wdGrid.innerHTML = '';
+
+    // 지난 시도들
+    s.tries.forEach(t => {
+      el.wdGrid.appendChild(makeRow(t.jamo, t.result, cols));
+    });
+    // 현재 입력 줄 (게임 안 끝났으면)
+    if (s.status !== 'solved' && s.status !== 'failed') {
+      el.wdGrid.appendChild(makeRow(curInput, null, cols, true));
+    }
+  }
+
+  function makeRow(jamo, result, cols, isCurrent) {
+    const row = document.createElement('div');
+    row.className = 'wd-row';
+    row.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    for (let i = 0; i < cols; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'wd-cell';
+      const ch = jamo[i];
+      if (ch) {
+        cell.textContent = ch;
+        cell.classList.add('filled');
+      }
+      if (result) cell.classList.add(result[i]);
+      row.appendChild(cell);
+    }
+    return row;
+  }
+
+  // ── 키보드 ────────────────────────────
+  const KBD_ROWS = [
+    ['ㅂ','ㅈ','ㄷ','ㄱ','ㅅ','ㅛ','ㅕ','ㅑ','ㅐ','ㅔ'],
+    ['ㅁ','ㄴ','ㅇ','ㄹ','ㅎ','ㅗ','ㅓ','ㅏ','ㅣ'],
+    ['ENTER','ㅋ','ㅌ','ㅊ','ㅍ','ㅠ','ㅜ','ㅡ','DEL'],
+  ];
+  // 물리 키보드(QWERTY, 2벌식 배열) → 한글 자모 매핑
+  // e.code는 키보드의 '물리적 위치'를 뜻해서, OS 입력기가 영어든 한글이든 상관없이 항상 같은 값이 나옵니다.
+  const KEY_TO_JAMO = {
+    KeyQ:'ㅂ', KeyW:'ㅈ', KeyE:'ㄷ', KeyR:'ㄱ', KeyT:'ㅅ',
+    KeyY:'ㅛ', KeyU:'ㅕ', KeyI:'ㅑ', KeyO:'ㅐ', KeyP:'ㅔ',
+    KeyA:'ㅁ', KeyS:'ㄴ', KeyD:'ㅇ', KeyF:'ㄹ', KeyG:'ㅎ',
+    KeyH:'ㅗ', KeyJ:'ㅓ', KeyK:'ㅏ', KeyL:'ㅣ',
+    KeyZ:'ㅋ', KeyX:'ㅌ', KeyC:'ㅊ', KeyV:'ㅍ',
+    KeyB:'ㅠ', KeyN:'ㅜ', KeyM:'ㅡ',
+  };
+  // Shift를 누르면 나오는 쌍자음/이중모음 (Q,W,E,R,T,O,P만 해당)
+  const KEY_TO_JAMO_SHIFT = {
+    KeyQ:'ㅃ', KeyW:'ㅉ', KeyE:'ㄸ', KeyR:'ㄲ', KeyT:'ㅆ',
+    KeyO:'ㅒ', KeyP:'ㅖ',
+  };
+
+  function buildKeyboard() {
+    el.kbd.innerHTML = '';
+    KBD_ROWS.forEach(row => {
+      const r = document.createElement('div');
+      r.className = 'kbd-row';
+      row.forEach(k => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'key';
+        if (k === 'ENTER') { btn.classList.add('key-enter'); btn.textContent = '입력'; btn.id = 'keyEnter'; btn.addEventListener('click', submitTry); }
+        else if (k === 'DEL') { btn.classList.add('key-wide'); btn.innerHTML = '⌫'; btn.addEventListener('click', delJamo); }
+        else { btn.textContent = k; btn.dataset.jamo = k; btn.addEventListener('click', () => addJamo(k)); }
+        r.appendChild(btn);
+      });
+      el.kbd.appendChild(r);
+    });
+    paintKeyboard();
+  }
+
+  // 키보드 색칠 (지금까지 시도로 확정된 자모 상태)
+  function paintKeyboard() {
+    const s = lineup[activeIdx];
+    const best = {};
+    const rank = { x:0, y:1, g:2 };
+    s.tries.forEach(t => {
+      t.jamo.forEach((j, i) => {
+        const st = t.result[i];
+        if (best[j] === undefined || rank[st] > rank[best[j]]) best[j] = st;
+      });
+    });
+    el.kbd.querySelectorAll('.key[data-jamo]').forEach(btn => {
+      const st = best[btn.dataset.jamo];
+      btn.classList.remove('g','y','x');
+      if (st) btn.classList.add(st);
+    });
+  }
+
+  function addJamo(j) {
+    const s = lineup[activeIdx];
+    if (curInput.length >= s.answerJamo.length) return;
+    curInput.push(j);
+    renderWordleGrid();
+  }
+  function delJamo() {
+    curInput.pop();
+    renderWordleGrid();
+  }
+
+  // ── 시도 제출 ─────────────────────────
+  function submitTry() {
+    const s = lineup[activeIdx];
+    if (curInput.length !== s.answerJamo.length) {
+      toast('자모를 모두 채워주세요');
+      return;
+    }
+    const result = judgeJamo(s.answerJamo, curInput);
+    s.tries.push({ jamo: [...curInput], result });
+
+    const correct = result.every(r => r === 'g');
+    if (correct) {
+      s.status = 'solved';
+    } else if (s.tries.length >= MAX_TRIES) {
+      s.status = 'failed';
+    } else {
+      s.status = 'progress';
+      // 진행 프리뷰: 확정(g)된 음절만 표시
+      s.preview = buildPreview(s);
+    }
+    curInput = [];
+
+    renderWordleGrid();
+    paintKeyboard();
+    updateNowTry();
+    save();
+
+    if (s.status === 'solved' || s.status === 'failed') {
+      setTimeout(() => { closeWordle(); checkAllDone(); }, 700);
+    }
+  }
+
+  // 진행중 프리뷰 (초성 확정된 것 노출)
+  function buildPreview(s) {
+    // 마지막 시도에서 g로 맞은 자모를 음절 위치에 대응시켜 간단 표기
+    const last = s.tries[s.tries.length - 1];
+    let out = [];
+    let ji = 0;
+    s.answerJamoMap.forEach(syl => {
+      let shown = '';
+      for (let k = 0; k < syl.count; k++) {
+        if (last.result[ji] === 'g') shown += syl.jamo[k];
+        ji++;
+      }
+      out.push(shown || '·');
+    });
+    return out.join(' ');
+  }
+
+  function checkAllDone() {
+    const anyFailed = lineup.some(s => s.status === 'failed');
+    const allDone = lineup.every(s => s.status === 'solved' || s.status === 'failed');
+    if (anyFailed || allDone) endGame();
+  }
+
+  // ── 게임 종료 ─────────────────────────
+  function endGame() {
+    over = true;
+
+    // 안 푼 문제(idle/progress)는 종료 시 실패 처리 + 정답 공개
+    lineup.forEach(s => {
+      if (s.status !== 'solved' && s.status !== 'failed') {
+        s.status = 'failed';
+      }
+    });
+
+    const solved = lineup.filter(s => s.status === 'solved').length;
+
+    el.matchMeta.parentElement.querySelector('.matchbar-theme').after; // no-op
+    el.tmi.hidden = false;
+    el.tmiTheme.textContent = game.theme;
+    el.tmiBody.textContent = game.tmi || '';
+
+    el.sharebox.hidden = false;
+    el.shareLabel.textContent = `미싱나인 #${String(gameNo).padStart(3,'0')}`;
+    el.shareCnt.textContent = `${solved}/9`;
+    el.emojiBar.innerHTML = '';
+    lineup.forEach((s, i) => {
+      const item = document.createElement('i');
+      const isSolved = s.status === 'solved';
+      item.style.setProperty('--tile-color', isSolved ? 'var(--wd-green)' : 'var(--wd-gray)');
+      item.style.animationDelay = `${i * 500}ms`;
+      item.classList.add('flip');
+      el.emojiBar.appendChild(item);
+      // 애니메이션 끝난 뒤 최종 색상 클래스 유지 (모션 감소 설정 대응)
+      setTimeout(() => item.classList.add(isSolved ? 'g' : 'x'), i * 80 + 5000);
+    });
+
+    el.share.hidden = false;
+    el.howto.hidden = true;
+    save();
+    renderField();
+    renderProgress();
+  }
+
+  // ── 저장/복원 ─────────────────────────
+  function save() {
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify({
+        date: kstDateStr(),
+        no: gameNo,
+        lineup: lineup.map(s => ({
+          order: s.order, status: s.status, preview: s.preview || '',
+          tries: s.tries,
+        })),
+      }));
+    } catch(e){}
+  }
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return null;
+      const d = JSON.parse(raw);
+      return (d && d.date === kstDateStr() && d.no === gameNo) ? d : null;
+    } catch(e) { try{localStorage.removeItem(STORE_KEY);}catch(_){} return null; }
+  }
+
+  // ── 공유 ──────────────────────────────
+  function shareText() {
+    const solved = lineup.filter(s => s.status === 'solved').length;
+    const grid = lineup.map(s => s.status === 'solved' ? '🟩' : '⬛').join('');
+    return `MISSING9 #${String(gameNo).padStart(3,'0')}\n${game.theme}\n${grid}\n${solved}/9\n${SITE_URL}`;
+  }
+  function toast(msg) {
+    el.toast.textContent = msg;
+    el.toast.classList.add('is-on');
+    setTimeout(() => el.toast.classList.remove('is-on'), 1600);
+  }
+  async function copyResult() {
+    const t = shareText();
+    try { await navigator.clipboard.writeText(t); toast('결과를 복사했어요'); }
+    catch(e) {
+      const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try{document.execCommand('copy');toast('결과를 복사했어요');}catch(_){toast('복사할 수 없어요');}
+      document.body.removeChild(ta);
+    }
+  }
+
+  // ── 이벤트 ────────────────────────────
+  el.btnBack.addEventListener('click', closeWordle);
+  el.btnGiveup.addEventListener('click', () => {
+    const s = lineup[activeIdx];
+    // 남은 시도 소진 → 실패 처리
+    while (s.tries.length < MAX_TRIES) s.tries.push({ jamo: [], result: [] });
+    s.status = 'failed';
+    curInput = [];
+    save();
+    closeWordle();
+    checkAllDone();
+  });
+  el.btnCopy.addEventListener('click', copyResult);
+  el.btnKakao.addEventListener('click', copyResult);
+  $('navPrev').addEventListener('click', () => toast('지난 경기는 준비 중이에요'));
+  $('navNext').addEventListener('click', () => toast('다음 경기는 내일 자정에 열려요'));
+
+  // 물리 키보드 지원
+  document.addEventListener('keydown', e => {
+    if (activeIdx < 0 || over) return;
+    if (e.key === 'Enter') { submitTry(); return; }
+    if (e.key === 'Backspace') { delJamo(); return; }
+    if (e.ctrlKey || e.metaKey || e.altKey) return; // 브라우저 단축키(Ctrl+R 등)는 건드리지 않음
+
+    const jamo = e.shiftKey
+      ? (KEY_TO_JAMO_SHIFT[e.code] || KEY_TO_JAMO[e.code])
+      : KEY_TO_JAMO[e.code];
+
+    if (jamo) {
+      e.preventDefault();
+      addJamo(jamo);
+    }
+  });
+
+  // 개발용: 제목 클릭 초기화 (배포 전 삭제)
+  const devReset = $('devReset');
+  if (devReset) devReset.addEventListener('click', () => { localStorage.removeItem(STORE_KEY); location.reload(); });
+
+  // ── 시작 ──────────────────────────────
+  async function init() {
+    let data;
+    try {
+      const res = await fetch('../data/missing9.json');
+      if (!res.ok) throw 0;
+      data = await res.json();
+    } catch(e) {
+      el.matchTheme.textContent = '데이터를 불러오지 못했어요';
+      return;
+    }
+    const games = data.games || [];
+    if (!games.length) { el.matchTheme.textContent = '경기가 없어요'; return; }
+
+    const idx = kstDayIndex();
+    if (idx < 0 || idx >= games.length) {
+      el.matchTheme.textContent = '오늘의 경기가 아직 준비되지 않았어요';
+      el.fieldWrap.hidden = true;
+      return;
+    }
+    gameNo = idx + 1;
+    game = games[idx];
+
+    // 구단 컬러 적용
+    const teamKey = TEAM_KEY[game.game_team];
+    if (teamKey) {
+      document.documentElement.style.setProperty('--accent', TEAM_COLOR[teamKey]);
+      document.documentElement.style.setProperty('--accent-dk', TEAM_COLOR_SUB1[teamKey]);
+      document.documentElement.style.setProperty('--accent-lt', TEAM_COLOR_SUB2[teamKey]);
+
+    }
+
+    // 라인업 상태 구성
+    lineup = game.lineup.map(p => {
+      const jm = nameToJamo(p.name);           // [{ch,jamo:[...]}]
+      const flat = jm.flatMap(x => x.jamo);     // 자모 1차원
+      return {
+        ...p,
+        answerJamo: flat,
+        answerJamoMap: jm.map(x => ({ jamo: x.jamo, count: x.jamo.length })),
+        status: 'idle',
+        tries: [],
+        preview: '',
+      };
+    });
+
+    const no = `#${String(gameNo).padStart(3,'0')}`;
+    el.matchNo.textContent = no;
+    el.navNo.textContent = no;
+    el.matchTheme.textContent = game.theme;
+    el.matchMeta.innerHTML =
+      `${game.date} · <span class="home">${game.home_team} ${game.home_score}</span> vs <span class="score">${game.away_score} ${game.away_team}</span>`;
+
+    // 복원
+    const saved = load();
+    if (saved) {
+      saved.lineup.forEach(sv => {
+        const s = lineup.find(x => x.order === sv.order);
+        if (s) { s.status = sv.status; s.tries = sv.tries || []; s.preview = sv.preview || ''; }
+      });
+      if (lineup.every(s => s.status==='solved'||s.status==='failed')) { endGame(); return; }
+    }
+
+    renderField();
+    renderProgress();
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>

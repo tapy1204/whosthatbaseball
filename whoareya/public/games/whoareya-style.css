@@ -1,0 +1,650 @@
+/* ============================================
+   Who Are Ya? — 게임 전용 스타일
+   주의: 공통 style.css 는 건드리지 말 것.
+   ============================================ */
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+:root {
+  --bg:        #17172b;
+  --panel:     #ffffff;
+  --hdr:       #1e1e38;
+  --ink:       #14142a;
+  --ink-sub:   #6b6b85;
+  --line:      #e6e6ef;
+
+  --badge-bg:  #33334f;
+  --badge-ink: #ffffff;
+  --hit:       #4caf6d;
+  --dir-ink:   #ffffff;
+
+  --kakao:     #fee500;
+  --lose:      #e56a6a;
+
+  /* 구단 메인/서브1(다크)/서브2(라이트틴트) 컬러 */
+  --team-lg:          #C30452;
+  --team-lg-sub1:      #92033E;
+  --team-lg-sub2:      #F3CDDC;
+
+  --team-hanwha:       #FC4E00;
+  --team-hanwha-sub1:  #BD3A00;
+  --team-hanwha-sub2:  #FEDCCC;
+
+  --team-ssg:          #CE0E2D;
+  --team-ssg-sub1:     #9A0A22;
+  --team-ssg-sub2:     #F5CFD5;
+
+  --team-samsung:      #074CA1;
+  --team-samsung-sub1: #053979;
+  --team-samsung-sub2: #CDDBEC;
+
+  --team-nc:           #315288;
+  --team-nc-sub1:      #253E66;
+  --team-nc-sub2:      #D6DCE7;
+
+  --team-kt:           #000000;
+  --team-kt-sub1:      #1A1A1A;
+  --team-kt-sub2:      #CCCCCC;
+
+  --team-lotte:        #041E42;
+  --team-lotte-sub1:   #031632;
+  --team-lotte-sub2:   #CDD2D9;
+
+  --team-kia:          #EA0029;
+  --team-kia-sub1:     #B0001F;
+  --team-kia-sub2:     #FBCCD4;
+
+  --team-doosan:       #1A1748;
+  --team-doosan-sub1:  #141136;
+  --team-doosan-sub2:  #D1D1DA;
+
+  --team-kiwoom:       #570514;
+  --team-kiwoom-sub1:  #41040F;
+  --team-kiwoom-sub2:  #DDCDD0;
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--bg);
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #fff;
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+/* ── 헤더 ─────────────────────────────── */
+.hdr {
+  background: var(--hdr);
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-bottom: 2px solid var(--line);
+}
+.hdr-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  color: #fff;
+  cursor: pointer;
+  
+}
+.hdr-btn {
+  width: 28px;
+  height: 28px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  opacity: .75;
+  transition: opacity .15s;
+}
+.hdr-btn:hover { opacity: 1; }
+.hdr-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; border-radius: 4px; }
+
+.hamburger, .hamburger::before, .hamburger::after {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: #8a8ab0;
+  border-radius: 2px;
+}
+.hamburger { position: relative; }
+.hamburger::before, .hamburger::after { content: ''; position: absolute; left: 0; }
+.hamburger::before { top: -6px; }
+.hamburger::after  { top:  6px; }
+
+.info-icon {
+  width: 22px;
+  height: 22x;
+  display: block;
+  color: #8a8ab0;
+}
+
+/* ── 흰 패널 ──────────────────────────── */
+.panel {
+  background: var(--panel);
+  color: var(--ink);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  padding: 20px 22px 26px;
+}
+.panel-no {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+/* 미스터리 */
+.mystery {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 10px;
+  margin: 0px 0 16px;
+}
+.mystery-hints {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+.mystery-hint {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--ink);
+}
+.mystery-mark {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #f1f1f5;
+  display: grid;
+  place-items: center;
+  font-size: 64px;
+  font-weight: 900;
+  color: #C3C6CC;
+  flex: none;
+}
+.mystery-mark.is-solved {
+  background: #eaf6ee;
+  color: var(--hit);
+  font-size: 60px;
+}
+
+/* 시작 안내 */
+.intro { text-align: center; }
+.intro-title {
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+.intro-desc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #000000;
+  margin-bottom: 20px;
+}
+
+/* 결과 */
+.verdict { text-align: center; }
+.verdict-head {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--hit);
+  letter-spacing: -0.02em;
+}
+.verdict-head.is-lose { color: var(--lose); }
+.verdict-sub {
+  font-size: 14px;
+  color: #4a4a63;
+  margin-top: 4px;
+  margin-bottom: 16px;
+}
+.answer-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  padding: 10px 20px 10px 10px;
+  width: fit-content;
+  margin: 0 auto;
+}
+.answer-badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--hit);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex: none;
+}
+.answer-info { text-align: left; }
+.answer-name { font-size: 18px; font-weight: 900; letter-spacing: -0.01em; }
+.answer-meta { font-size: 12px; color: var(--ink-sub); margin-top: 2px; }
+
+/* 입력 */
+.entry { position: relative; margin-top: 20px; }
+.entry-input {
+  width: 100%;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 20px 30px;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  background: #F5F6F7;
+  outline: none;
+  transition: border-color .15s;
+}
+.entry-input::placeholder { color: #606770; font-weight: 800; }
+.entry-input:focus { border-color: var(--ink); }
+.entry-input:disabled { background: #f5f5f8; color: #9a9ab0; }
+.entry-help {
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--ink);
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
+/* 자동완성(추가후수정필요) */
+.ac {
+  position: absolute;
+  top: calc(100% - 25.5px);
+  left: 12px;
+  right: 12px;
+  z-index: 20;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: 0 12px 28px rgba(20, 20, 42, .14);
+  overflow: hidden;
+  max-height: 400px;
+  overflow-y: auto;
+}
+.ac-item {
+  padding: 11px 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  border-bottom: 1px solid #f2f2f6;
+}
+.ac-item:last-child { border-bottom: 0; }
+.ac-item b { font-size: 15px; font-weight: 700; color: var(--ink); }
+.ac-item span { font-size: 12px; color: var(--ink-sub); }
+.ac-item:hover, .ac-item.is-on { background: #f4f4f8; }
+
+/* ── 공유 ─────────────────────────────── */
+.share {
+  display: flex;
+  gap: 10px;
+  padding: 18px 16px 0px;
+}
+.share[hidden] { display: none; }
+.btn {
+  flex: 1;
+  border: 0;
+  border-radius: var(--r-md);
+  padding: 15px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .1s, opacity .15s;
+}
+.btn:active { transform: scale(.985); }
+.btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.btn-kakao {
+  background: var(--kakao);
+  color: #14142a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.kakao-mark {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background: #14142a;
+  color: var(--kakao);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 900;
+}
+.btn-ghost {
+  background: transparent;
+  border: 1px solid #3a3a58;
+  color: #e8e8f4;
+}
+.btn-ghost:hover { background: #22223c; }
+
+/* ── 시도 기록 ────────────────────────── */
+.log { padding: 22px 16px 8px; }
+.try { margin-bottom: 18px; }
+.try-name {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 10px;
+  letter-spacing: 0em;
+}
+.try-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+
+/* 배지 셀 (기록 + 게임방법 공용) */
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.badge {
+  width: 93%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--badge-bg);
+  color: var(--badge-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17.5px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-shadow: 0.7px 1.4px 0.5px #000;
+  line-height: 1;
+  padding: 2px;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+}
+.badge.logo-only {
+  color: transparent !important;
+  text-shadow: none !important;
+}
+.badge.is-hit { background: var(--hit); }
+.badge .arw {
+  font-size: 14px;
+  font-weight: 900;
+  margin-left: -1px;
+  color: var(--dir-ink);
+}
+.cell-cap {
+  font-size: 13px;
+  color: #e6e6ef;
+  font-weight: 900;
+}
+
+/* 공통 스타일 설정 (변수 적용) */
+.badge-region {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  color: #fff;
+}
+.badge-region::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-image: var(--bg-img);
+  background-size: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.7;
+  z-index: -1;
+}
+.badge-team::before {
+  opacity: 1;
+}
+
+
+/* 지역 이미지 */
+.badge-capital { --bg-img: url('../image/map/수도2.png'); }
+.badge-gangwon { --bg-img: url('../image/map/강원2.png'); }
+.badge-yeongnam { --bg-img: url('../image/map/영남2.png'); }
+.badge-jeju { --bg-img: url('../image/map/제주2.png'); }
+.badge-chungcheong { --bg-img: url('../image/map/충청2.png'); }
+.badge-honam { --bg-img: url('../image/map/호남2.png'); }
+
+/* 포지션 이미지 */
+.badge-pitcher { --bg-img: url('../image/position/투수3.png'); }
+.badge-infield { --bg-img: url('../image/position/내야.png'); }
+.badge-outfield { --bg-img: url('../image/position/외야.png'); }
+
+/* 구단 로고 */
+.badge-lg { --bg-img: url('../image/team/lg.png'); }
+.badge-kt { --bg-img: url('../image/team/kt.png'); }
+.badge-ssg { --bg-img: url('../image/team/ssg.png'); }
+.badge-nc { --bg-img: url('../image/team/NC.png'); }
+.badge-doosan { --bg-img: url('../image/team/두산.png'); }
+.badge-kia { --bg-img: url('../image/team/기아.png'); }
+.badge-lotte { --bg-img: url('../image/team/롯데.png'); }
+.badge-samsung { --bg-img: url('../image/team/삼성.png'); }
+.badge-hanwha { --bg-img: url('../image/team/한화.png'); }
+.badge-kiwoom { --bg-img: url('../image/team/키움.png'); }
+
+/* 배지 등장 애니메이션 */
+@keyframes badgePop {
+  0%   { opacity: 0; transform: scale(0.3); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.badge.is-anim {
+  opacity: 0;
+  animation: badgePop 1.40s ease forwards;
+}
+
+/* ── 상세 게임 방법 팝업 ──────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+}
+.modal-overlay[hidden] { display: none; }
+.modal-box {
+  width: 100%;
+  max-width: 420px;
+  max-height: 85dvh;
+  overflow-y: auto;
+  padding: 4px 6px;
+}
+.modal-confirm {
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: #fff;
+  color: var(--ink);
+  font-weight: 700;
+  cursor: pointer;
+}
+.modal-box.howto {
+  padding: 28px 40px;
+}
+
+/* 팝업 상세 내용 */
+.detail-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #d4d4e4;
+  margin-bottom: 4px;
+}
+.detail-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.detail-label {
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 10px;
+  margin-left: 3px;
+}
+.detail-list li {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #d4d4e4;
+}
+.detail-list b {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ── 게임 방법 ────────────────────────── */
+.howto {
+  margin: -15px 5px 0px;
+  background: #21213a;
+  border-radius: var(--r-md);
+  padding: 20px 18px;
+}
+.howto-title {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.howto-label {
+  font-size: 12px;
+  color: #8a8ab0;
+  margin-bottom: 12px;
+}
+.howto-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+.howto-div {
+  height: 1px;
+  background: #33334f;
+  margin: 18px 0 24px;
+}
+
+.legend {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: #d4d4e4;
+}
+.legend b { color: #fff; font-weight: 700; }
+.dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex: none;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: -2.5px;
+  text-indent: -2.5px;
+}
+.dot-hit  { background: var(--hit); }
+.dot-dir  { background: #e0a03a; color: #fff; }
+.dot-miss { background: var(--badge-bg); }
+
+/* ── 하단 네비 ────────────────────────── */
+.nav {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px 22px;
+}
+.nav-btn {
+  background: none;
+  border: 0;
+  color: #c8c8dc;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px;
+}
+.nav-btn:hover { color: #fff; }
+.nav-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; border-radius: 4px; }
+.nav-no {
+  font-size: 13px;
+  font-weight: 700;
+  color: #c8c8dc;
+}
+
+/* ── 토스트 ───────────────────────────── */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translate(-50%, 12px);
+  background: #0d0d1c;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 11px 18px;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s, transform .2s;
+  z-index: 60;
+}
+.toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+
+/* ── 반응형 ───────────────────────────── */
+@media (max-width: 380px) {
+  .badge { font-size: 11px; }
+  .intro-title { font-size: 23px; }
+  .hdr-title { font-size: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}

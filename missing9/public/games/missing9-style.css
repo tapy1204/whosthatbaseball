@@ -1,0 +1,575 @@
+/* ============================================
+   MISSING9 — 게임 전용 스타일
+   whoareya 디자인 토큰 계승 (다크 테마 / Pretendard / Anton)
+   주의: 공통 style.css 는 건드리지 말 것.
+   ============================================ */
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+:root {
+  --bg:        #14141f;
+  --hdr:       #1e1e38;
+  --panel-2:   #21213a;
+  --ink:       #14142a;
+  --line:      #2a2a44;
+     
+  --field:     #3f7d4e;      /* 야구장 잔디 */
+  --field-dk:  #2e5f3a;      /* 잔디 어두운 부분 */
+  --dirt:      #b08a5a;      /* 내야 흙 */
+  --jersey:    #e8613a;      /* 유니폼 오렌지 */
+  --jersey-dk: #7a2a1a;      /* 실패 유니폼 (어두운 빨강) */
+
+  --wd-green:  #4caf6d;      /* 워들: 자리·글자 정확 */
+  --wd-yellow: #e8b84a;      /* 워들: 있지만 자리 다름 */
+  --wd-gray:   #2f2f48;      /* 워들: 없는 글자 */
+  --wd-empty:  #1a1a2e;      /* 빈 칸 */
+
+  --order-badge: #14142a;    /* 타순 검은 배지 */
+  --accent:    #e8613a;      /* 팀 컬러 기본값 (JS가 게임마다 덮어씀) */
+  --accent-dk: #7a2a1a;      /* 팀 컬러 어두운 버전 (실패 상태) */
+  --accent-lt: #e8b84a;      /* 팀 컬러 밝은 버전 (배지 강조, JS가 덮어씀) */
+
+  --text:      #ececf5;
+  --muted:     #8a8ab0;
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+
+  /* 구단 팔레트 */
+  --team-lg:           #C30452;
+  --team-lg-sub1:      #92033E;
+  --team-lg-sub2:      #F3CDDC;
+  --team-hanwha:       #FC4E00;
+  --team-hanwha-sub1:  #BD3A00;
+  --team-hanwha-sub2:  #FEDCCC;
+  --team-ssg:          #CE0E2D;
+  --team-ssg-sub1:     #9A0A22;
+  --team-ssg-sub2:     #F5CFD5;
+  --team-samsung:      #074CA1;
+  --team-samsung-sub1: #053979;
+  --team-samsung-sub2: #CDDBEC;
+  --team-nc:           #315288;
+  --team-nc-sub1:      #253E66;
+  --team-nc-sub2:      #D6DCE7;
+  --team-kt:           #000000;
+  --team-kt-sub1:      #1A1A1A;
+  --team-kt-sub2:      #CCCCCC;
+  --team-lotte:        #041E42;
+  --team-lotte-sub1:   #031632;
+  --team-lotte-sub2:   #CDD2D9;
+  --team-kia:          #EA0029;
+  --team-kia-sub1:     #B0001F;
+  --team-kia-sub2:     #FBCCD4;
+  --team-doosan:       #1A1748;
+  --team-doosan-sub1:  #141136;
+  --team-doosan-sub2:  #D1D1DA;
+  --team-kiwoom:       #570514;
+  --team-kiwoom-sub1:  #41040F;
+  --team-kiwoom-sub2:  #DDCDD0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--bg);
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: var(--text);
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+/* ── 헤더 ─────────────────────────────── */
+.hdr {
+  background: var(--hdr);
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-bottom: 2px solid var(--line);
+}
+.hdr-title {
+  font-family: 'Anton', sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  color: #fff;
+  cursor: pointer;
+  
+}
+.hdr-btn {
+  width: 28px;
+  height: 28px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  opacity: .75;
+  transition: opacity .15s;
+}
+.hdr-btn:hover { opacity: 1; }
+.hdr-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; border-radius: 4px; }
+
+.hamburger, .hamburger::before, .hamburger::after {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: #8a8ab0;
+  border-radius: 2px;
+}
+.hamburger { position: relative; }
+.hamburger::before, .hamburger::after { content: ''; position: absolute; left: 0; }
+.hamburger::before { top: -6px; }
+.hamburger::after  { top:  6px; }
+
+.stats-icon { display: flex; align-items: flex-end; gap: 2px; height: 16px; }
+.stats-icon i { width: 3px; background: #8a8ab0; border-radius: 1px; }
+.stats-icon i:nth-child(1) { height: 8px; }
+.stats-icon i:nth-child(2) { height: 16px; }
+.stats-icon i:nth-child(3) { height: 11px; }
+
+
+/* ── 경기 정보 ────────────────────────── */
+.matchbar {
+  padding: 20px 22px 16px;
+  background: #1E1B2E;
+  border-bottom: 2px solid var(--line);
+}
+.matchbar-no {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: -0.01em;
+}
+
+.matchbar-theme {
+  font-size: 28px;
+  font-weight: 900;
+  color: #fff;
+  margin: 10px 0 8px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.matchbar-meta {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.matchbar-meta .home { color: var(--accent); font-weight: 800; }
+.matchbar-meta .score { color: #fff; font-weight: 800; }
+
+
+/* ── 현재 입력 중인 선수 (워들 상단 고정) ── */
+.now {
+  margin: 16px;
+  border: 2px solid var(--accent);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.now-badge {
+  position: relative;
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  background: var(--jersey);
+  color: #fff;
+  display: grid; place-items: center;
+  font-size: 22px; font-weight: 900;
+  flex: none;
+}
+.now-order {
+  position: absolute; top: -8px; left: -8px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--ordere);
+  color: var(--wd-yellow);
+  font-size: 12px; font-weight: 900;
+  display: grid; place-items: center;
+}
+.now-info .now-role { font-size: 16px; font-weight: 900; color: #fff; }
+.now-info .now-try  { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+/* ── 야구장 그라운드 ──────────────────── */
+.field-wrap { padding: 15px 12px; }
+.field {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.04;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,.03) 0px,
+      rgba(255,255,255,.03) 30px,
+      transparent 30px,
+      transparent 60px
+    ),
+    var(--field);
+}
+
+/* 내야 다이아몬드 */
+.diamond {
+  position: absolute;
+  left: 50%; top: 57%;
+  width: 38%; height: 38%;
+  background: var(--dirt);
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-radius: 8px;
+  border: 3px solid rgba(255,255,255,.7);
+}
+.mound {
+  position: absolute;
+  left: 50%; top: 57%;
+  width: 10%; aspect-ratio: 1;
+  background: #c99a68;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid rgba(255,255,255,.7);
+}
+/* 파울라인 (홈→1루, 홈→3루 외야까지) */
+.foul {
+  position: absolute;
+  left: 50%; top: 83%;
+  width: 0; height: 0;
+  z-index: 0;
+  transform: translate(-50%);
+}
+.foul::before, .foul::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -4px;            
+  width: 3px;
+  height: 600px;
+  background: rgba(255,255,255,.7);
+  transform-origin: bottom center;
+}
+.foul::before { transform: rotate(-45deg); }
+.foul::after  { transform: rotate(45deg); }
+
+/* 진행 상황 */
+.progress {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  z-index: 3;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+/* 선수 마커 */
+.slot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  width: 7px;
+}
+.slot-jersey {
+  position: relative;
+  width: 50px; height: 50px;
+  border-radius: 12px;
+  background: var(--jersey);
+  color: #fff;
+  display: grid; place-items: center;
+  font-size: 22px; font-weight: 900;
+  box-shadow: 0 3px 8px rgba(0,0,0,.75);
+}
+.slot.is-solved  .slot-jersey { background: var(--wd-green); }
+.slot.is-failed  .slot-jersey { background: var(--jersey-dk); }
+.slot-order {
+  position: absolute; top: -8px; left: -8px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--order-badge);
+  color: var(--wd-yellow);
+  font-size: 12px; font-weight: 900;
+  display: grid; place-items: center;
+  border: 1.5px solid #e8b84a;
+}
+/* 이름표 (진행중 미니 프리뷰 / 완료 이름) */
+.slot-name {
+  min-width: 54px;
+  padding: 2px 9px;
+  border-radius: 7px;
+  background: rgba(20,20,30,.55);
+  color: #fff;
+  font-size: 12.5px; font-weight: 800;
+  text-align: center;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+.slot.is-solved .slot-name {
+  background: rgba(76,175,109,.25);
+  border: 1px solid var(--wd-green);
+}
+.slot.is-failed .slot-name {
+  background: rgba(122,42,26,.4);
+  border: 1px solid #a5432e;
+}
+.slot.is-progress .slot-name {
+  background: rgba(20,20,30,.55);
+  border: 1px solid var(--wd-yellow);
+  color: var(--wd-yellow);
+  letter-spacing: 1px;
+}
+.slot-empty {
+  display: flex; gap: 4px;
+  padding: 4px 0;
+}
+.slot-empty i {
+  width: 8px; height: 3px; border-radius: 2px;
+  background: rgba(255,255,255,.4);
+}
+/* 타점·도루 아이콘 */
+.slot-stat {
+  position: absolute;
+  top: -8px;
+  left: 32px;
+  display: flex; align-items: center; gap: 3px;
+  background: var(--order-badge);
+  padding: 2px 7px 2px 5px;
+  border-radius: 999px;
+  font-size: 11px; font-weight: 900;
+  color: var(--wd-yellow);
+  white-space: nowrap;
+}
+.slot-stat svg,
+.slot-stat img { width: 12px; height: 12px; object-fit: contain; }
+
+/* ── 워들 입력 화면 ───────────────────── */
+.wordle { padding: 4px 16px 0; }
+.wd-grid {
+  display: grid;
+  gap: 7px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.wd-row { display: flex; gap: 7px; justify-content: center; }
+.wd-cell {
+  width: 46px; height: 52px;
+  border-radius: 9px;
+  background: var(--wd-empty);
+  border: 1.5px solid var(--line);
+  display: grid; place-items: center;
+  font-size: 24px; font-weight: 800;
+  color: #fff;
+}
+.wd-cell.filled { border-color: #45456a; }
+.wd-cell.g { background: var(--wd-green);  border-color: var(--wd-green); }
+.wd-cell.y { background: var(--wd-yellow); border-color: var(--wd-yellow); color: #1a1a2e; }
+.wd-cell.x { background: var(--wd-gray);   border-color: var(--wd-gray); }
+
+/* 자모 키보드 */
+.kbd { display: flex; flex-direction: column; gap: 7px; padding-bottom: 12px; }
+.kbd-row { display: flex; gap: 5px; justify-content: center; }
+.key {
+  flex: 1;
+  min-width: 0;
+  max-width: 40px;
+  height: 50px;
+  border: 0; border-radius: 8px;
+  background: var(--panel-2);
+  color: #fff;
+  font-family: inherit;
+  font-size: 18px; font-weight: 700;
+  cursor: pointer;
+  transition: background .1s, transform .05s;
+}
+.key:active { transform: scale(.94); }
+.key.g { background: var(--wd-green); }
+.key.y { background: var(--wd-yellow); color: #1a1a2e; }
+.key.x { background: #16162a; color: #55556f; }
+.key-wide { max-width: 70px; font-size: 15px; font-weight: 800; }
+.key-enter { background: var(--accent); max-width: 70px; font-size: 15px; font-weight: 800; }
+.key-enter:disabled { opacity: .4; cursor: default; }
+
+/* ── 게임 방법 / 하단 상태 ────────────── */
+.howto {
+  margin: 0px 5px 0px;
+  background: var(--panel-2);
+  border-radius: var(--r-md);
+  padding: 20px 18px;
+}
+.howto-title {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.howto-line {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--muted);
+  margin-bottom: 10px;
+}
+.howto-line b { color: #fff; }
+.howto-line .accent { color: var(--wd-yellow); font-weight: 800; }
+.howto-mini {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--jersey); color: #fff;
+  display: grid; place-items: center;
+  font-size: 13px; font-weight: 900; flex: none;
+  position: relative;
+}
+.howto-mini .m-order {
+  position: absolute; top: -6px; left: -6px;
+  width: 17px; height: 17px; border-radius: 50%;
+  background: var(--order-badge); color: var(--wd-yellow);
+  font-size: 9px; font-weight: 900;
+  display: grid; place-items: center;
+}
+.howto-stat-ic {
+  width: 26px; height: 26px; border-radius: 6px;
+  background: var(--order-badge); color: var(--wd-yellow);
+  display: grid; place-items: center; flex: none;
+}
+.howto-stat-ic svg,
+.howto-stat-ic img { width: 13px; height: 13px; object-fit: contain; }
+.howto-div { height: 1px; background: var(--line); margin: 14px 0; }
+.legend-row {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: #fff; margin-bottom: 9px; font-weight: 800;
+}
+.legend-sq { width: 22px; height: 22px; border-radius: 6px; flex: none; }
+.legend-sq.g { background: var(--wd-green); }
+.legend-sq.y { background: var(--wd-yellow); }
+.legend-sq.x { background: var(--wd-gray); }
+
+
+
+/* ── 결과 화면 ────────────────────────── */
+.tmi {
+  margin: 10px 16px 0;
+  margin-bottom: 20px;
+}
+.tmi-title { font-size: 16px; font-weight: 900; margin-bottom: 8px; }
+.tmi-title .lbl { color: var(--accent); }
+.tmi-body { font-size: 14px; line-height: 1.6; color: #c8c8dc; }
+
+.sharebox {
+  margin: 0px 16px 16px;
+  background: var(--panel-2);
+  border-radius: var(--r-md);
+  padding: 16px;
+}
+.sharebox-head {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; font-weight: 800; color: var(--muted);
+  margin-bottom: 10px;
+}
+.sharebox-head .cnt { color: #fff; }
+.emoji-bar { display: flex; gap: 6px; perspective: 600px; }
+.emoji-bar i {
+  flex: 1; aspect-ratio: 1; border-radius: 8px; max-width: 44px;
+  background: var(--wd-empty);
+  transform-style: preserve-3d;
+}
+.emoji-bar i.flip { animation: tileFlip .5s ease forwards; }
+.emoji-bar i.g { background: var(--wd-green); }
+.emoji-bar i.x { background: var(--wd-gray); }
+
+@keyframes tileFlip {
+  0%     { transform: rotateX(0deg);  background: var(--wd-empty); }
+  50%    { transform: rotateX(90deg); background: var(--wd-empty); }
+  50.01% { background: var(--tile-color); }
+  100%   { transform: rotateX(0deg); background: var(--tile-color); }
+}
+
+/* ── 공유 버튼 ────────────────────────── */
+.share {
+  display: flex; gap: 10px;
+  padding: 0 16px 8px;
+}
+.share[hidden] { display: none; }
+.btn {
+  flex: 1; border: 0; border-radius: var(--r-md);
+  padding: 15px 12px;
+  font-family: inherit; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: transform .5s;
+}
+.btn:active { transform: scale(.985); }
+.btn-kakao {
+  background: #fee500; color: #14142a;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.kakao-mark {
+  width: 20px; height: 20px; border-radius: 5px;
+  background: #14142a; color: #fee500;
+  display: grid; place-items: center;
+  font-size: 12px; font-weight: 900;
+}
+.btn-ghost { background: transparent; border: 1px solid #3a3a58; color: #e8e8f4; }
+.btn-ghost:hover { background: #22223c; }
+
+/* ── 하단 액션 (Back / Give Up) ──────── */
+.actions {
+  display: flex; justify-content: space-between;
+  padding: 4px 16px 12px;
+}
+.act-btn {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: #fff;
+  border-radius: 10px;
+  padding: 12px 26px;
+  font-family: inherit; font-size: 14px; font-weight: 800;
+  cursor: pointer;
+}
+.act-btn:hover { background: rgba(232,97,58,.12); }
+
+/* ── 하단 네비 ────────────────────────── */
+.nav {
+  margin-top: auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px 22px;
+  border-top: 1px solid var(--line);
+}
+.nav-btn {
+  background: none; border: 0; color: #c8c8dc;
+  font-family: inherit; font-size: 13px; font-weight: 700;
+  cursor: pointer; padding: 4px;
+}
+.nav-btn:hover { color: #fff; }
+.nav-no { font-size: 13px; font-weight: 700; color: #c8c8dc; }
+
+/* ── 토스트 ───────────────────────────── */
+.toast {
+  position: fixed; left: 50%; bottom: 28px;
+  transform: translate(-50%, 12px);
+  background: #0d0d1c; color: #fff;
+  font-size: 13px; font-weight: 500;
+  padding: 11px 18px; border-radius: 999px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s, transform .2s;
+  z-index: 60;
+}
+.toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+
+[hidden] { display: none !important; }
+
+@media (max-width: 380px) {
+  .wd-cell { width: 40px; height: 46px; font-size: 20px; }
+  .key { height: 46px; font-size: 16px; }
+  .slot { width: 62px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
