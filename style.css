@@ -5,7 +5,6 @@
   body {
     margin: 0;
     max-width: 480px;
-    align-items: center;
     background-color: rgb(30, 30, 33);
     color: #ffffff;
     font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
@@ -25,15 +24,23 @@
   }
 
   header {
-    text-align: center;
-    padding: 32px 16px;
+    text-align: left;
+    padding: 32px 50px;
   }
 
   header h1 {
     margin: 0;
-    font-size: 40px;
+    font-size: 50px;
     letter-spacing: 0.8px;
     font-weight: 800;
+  }
+
+  header h1 .line2 {
+    display: block;
+  }
+
+  header h1 .line3 {
+    display: block;
   }
 
   .month {
@@ -41,13 +48,17 @@
     max-width: 90%;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: baseline;
     gap: 18px;
     font-size: 28px;
     font-weight: 700;
     opacity: 0.85;
-    padding-bottom: 12px;
+    padding: 0 50px 9px;
+  }
+
+  #month {
+    font-size: 27px;
   }
 
   .week-switcher {
@@ -59,6 +70,7 @@
 
   #week {
     text-align: right;
+    font-size: 18px;
   }
 
   .week-nav {
@@ -78,12 +90,13 @@
   }
 
   .calendar {
-    width: 800px;
+    width: 320px;
     max-width: 90%;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    gap: 6px;
+    gap: 12px;
+    padding: 0 50px 12px;
   }
 
   .calendar .day {
@@ -91,8 +104,8 @@
     flex-direction: column;
     align-items: center;
     border-radius:26%;
-    gap: 4px;
-    width: 70px;
+    gap: 0px;
+    width: 60px;
     padding: 12px 0 4px;
     cursor: pointer;
   }
@@ -103,7 +116,7 @@
   }
 
   .calendar .day-label {
-    font-size: 16px;
+    font-size: 14px;
     opacity: 0.6;
     line-height: 1;
   }
@@ -112,7 +125,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
+    border-radius: 20%;
+    font-size: 30px;
     opacity: 0.6;
     padding: 3px 0 0 1px;
     box-sizing: border-box;
@@ -134,10 +148,10 @@
   .status-card {
     width: 800px;
     max-width: 90%;
-    margin: 24px auto 0;
+    margin: 24px 50px 0;
     background-color: #2a2a2e;
     border-radius: 24px;
-    padding: 40px 40px 32px;
+    padding: 24px 24px 16px;
     border: 1px solid rgba(90, 84, 84, 0.3);
     box-sizing: border-box;
   }
@@ -244,6 +258,7 @@
     width: 800px;
     max-width: 90%;
     margin: 20px auto;
+    padding: 0 50px;
   }
 
   .games-header {
@@ -387,25 +402,3 @@
     font-size: 18px;
     line-height: 1.5;
   }
-
-  @media (max-width: 480px) { /* 모바일 */
-    header { text-align: left; }
-    header { padding: 32px 50px; }
-    header h1 { font-size: 50px; }
-    header h1 { font-weight: 800; }
-    header h1 .line2 { display: block; }
-    header h1 .line3 { display: block; }
-    .month { justify-content: flex-start; padding: 0 50px 9px;}
-    #month { font-size: 27px; }
-    #week { font-size: 18px; }
-    .calendar { width: 320px; gap: 12px; padding: 0 50px 12px; }
-    .calendar .day { gap: 0px; width: 60px; }
-    .calendar .day-label { font-size: 14px; }
-    .calendar .date-num {
-    border-radius: 20%;
-    font-size: 30px;
-    }
-    .status-card { margin: 24px 50px 0; padding : 24px 24px 16px; }
-    .games-section { padding: 0 50px; }
-  }
-  
