@@ -14,6 +14,10 @@ KBO(한국야구위원회) 선수 데이터를 기반으로 만든 야구 팬 �
 
 ```
 .
+├── data/                                  # 전체 원본 데이터 (선수 크롤링 결과 + DB 스키마)
+│   ├── kbo_all_players_parsed.json        # 크롤링된 선수 전체 데이터
+│   └── kbo_player_schema.sql              # DB 스키마
+│
 ├── missing9/
 │   └── public/
 │       ├── data/
@@ -26,9 +30,7 @@ KBO(한국야구위원회) 선수 데이터를 기반으로 만든 야구 팬 �
 └── whoareya/
     └── public/
         ├── data/
-        │   ├── kbo_all_players_parsed.json  # 크롤링된 선수 전체 데이터
-        │   ├── kbo_player_schema.sql         # DB 스키마
-        │   └── players.json                  # 게임용으로 가공된 선수 데이터
+        │   └── players.json          # 게임용으로 가공된 선수 데이터
         ├── games/
         │   ├── whoareya.html
         │   └── whoareya-style.css
