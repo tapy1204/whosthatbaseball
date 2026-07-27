@@ -44,6 +44,9 @@ KBO(한국야구위원회) 선수 데이터를 기반으로 만든 야구 팬 �
             └── team/                 # 구단 엠블럼
 ```
 
+최상위 `index.html`은 두 게임(`missing9`, `whoareya`)으로 들어가는 메인 허브 화면입니다.
+전체 선수 원본 데이터와 DB 스키마는 `data/`에 두고, 각 게임은 여기서 필요한 만큼만 가공해서 자기 폴더 안의 `data/`에 따로 둡니다.
+
 ## 데이터 출처
 
 선수 데이터는 [KBO 공식 홈페이지](https://www.koreabaseball.com)에서 수집했습니다.
@@ -52,25 +55,32 @@ KBO(한국야구위원회) 선수 데이터를 기반으로 만든 야구 팬 �
 - 수상 기록(MVP, 신인상, 골든글러브, 수비상, 올스타전/한국시리즈 MVP 등)
 - 특이 기록(20-20, 30-30, 사이클링히트, 한국시리즈 우승, 국가대표 출전 등)
 
-`whoareya/public/data/kbo_player_schema.sql`에 전체 DB 스키마가 정의되어 있습니다.
+`data/kbo_player_schema.sql`에 전체 DB 스키마가 정의되어 있습니다.
 
 > KBO 공식 사이트의 robots.txt 정책을 확인한 후 수집했으며, 개인 프로젝트/팬 콘텐츠 목적으로만 사용합니다.
 
 ## 실행 방법
 
+**바로 플레이하기**: https://whosthatbaseball.vercel.app
+
+메인 화면(허브)에서 원하는 게임을 선택하시면 됩니다.
+
+- Missing9: https://whosthatbaseball.vercel.app/missing9/public/games/missing9.html
+- Who Are Ya: https://whosthatbaseball.vercel.app/whoareya/public/games/whoareya.html
+
+### 로컬에서 개발/테스트하고 싶을 때
+
 정적 페이지라 별도 서버 설정 없이 바로 열어도 되지만, 로컬 fetch(json) 제약 때문에 간단한 로컬 서버로 여는 걸 추천합니다.
 
 ```bash
-# 예: missing9 실행
-cd missing9/public
+cd whosthatbaseball
 python3 -m http.server 8000
-# 브라우저에서 http://localhost:8000/games/missing9.html 접속
-
-# whoareya 실행
-cd whoareya/public
-python3 -m http.server 8001
-# 브라우저에서 http://localhost:8001/games/whoareya.html 접속
+# 브라우저에서 http://localhost:8000 접속 -> index.html(메인 허브)에서 게임 선택
 ```
+
+각 게임을 바로 열고 싶으면:
+- Missing9: `http://localhost:8000/missing9/public/games/missing9.html`
+- Who Are Ya: `http://localhost:8000/whoareya/public/games/whoareya.html`
 
 ## 기술 스택
 
