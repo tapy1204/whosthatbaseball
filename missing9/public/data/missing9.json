@@ -1,34 +1,1706 @@
 {
   "_guide": {
     "설명": "MISSING9 경기별 데이터. 하루에 한 경기(games 배열의 인덱스=날짜순).",
-    "position": "좌/우/중/一/二/三/유/포/지 중 하나 (수비 위치 표기)",
+    "position": "좌/우/중/-/二/三/유/포/지 중 하나 (수비 위치 표기)",
     "order": "타순 1~9",
-    "number": "등번호",
     "rbi": "이 경기 타점 (0이면 아이콘 안 뜸)",
     "sb": "이 경기 도루 (0이면 아이콘 안 뜸)",
     "name": "정답 이름. 외국인 선수는 KBO 공식 한국어 등록명"
   },
   "games": [
     {
-      "id": "m001",
-      "theme": "류현진 한국 복귀전",
+      "id": "m01",
+      "theme": "류현진 KBO 복귀전",
       "date": "2024.3.23",
       "game_team": "한화",
-      "home_team": "한화",
-      "home_score": 2,
-      "away_team": "LG",
-      "away_score": 8,
+      "home_team": "LG",
+      "home_score": 8,
+      "away_team": "한화",
+      "away_score": 2,
       "tmi": "2012년 10월 4일 넥센전 이후 4188일 만의 KBO 리그 공식 복귀전이자, 2012년 이후 12년 만의 KBO 개막전 선발 등판이었다.",
       "lineup": [
-        { "order": 1, "position": "좌", "name": "정은원", "number": 51, "rbi": 0, "sb": 0 },
-        { "order": 2, "position": "우", "name": "페라자", "number": 13, "rbi": 1, "sb": 0 },
-        { "order": 3, "position": "지", "name": "안치홍", "number": 36, "rbi": 0, "sb": 1000 },
-        { "order": 4, "position": "三", "name": "노시환", "number": 7,  "rbi": 0, "sb": 0 },
-        { "order": 5, "position": "一", "name": "채은성", "number": 53, "rbi": 0, "sb": 0 },
-        { "order": 6, "position": "二", "name": "문현빈", "number": 29, "rbi": 0, "sb": 0 },
-        { "order": 7, "position": "중", "name": "김강민", "number": 8,  "rbi": 0, "sb": 0 },
-        { "order": 8, "position": "유", "name": "하주석", "number": 2,  "rbi": 0, "sb": 0 },
-        { "order": 9, "position": "포", "name": "최재훈", "number": 42, "rbi": 1, "sb": 0 }
+        {
+          "order": 1,
+          "position": "좌",
+          "name": "정은원",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "우",
+          "name": "페라자",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "지",
+          "name": "안치홍",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "三",
+          "name": "노시환",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "-",
+          "name": "채은성",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "二",
+          "name": "문현빈",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "중",
+          "name": "김강민",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "유",
+          "name": "하주석",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "포",
+          "name": "최재훈",
+          "rbi": 1,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m02",
+      "theme": "이승엽 은퇴 경기",
+      "date": "2017.10.3",
+      "game_team": "삼성",
+      "home_team": "삼성",
+      "home_score": 10,
+      "away_team": "넥센",
+      "away_score": 9,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "중",
+          "name": "박해민",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "二",
+          "name": "강한울",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "-",
+          "name": "이승엽",
+          "rbi": 3,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "지",
+          "name": "러프",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "우",
+          "name": "구자욱",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "三",
+          "name": "이원석",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "좌",
+          "name": "박한이",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "유",
+          "name": "김성훈",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "포",
+          "name": "김민수",
+          "rbi": 2,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m03",
+      "theme": "서건창 200안타 달성",
+      "date": "2014.10.17",
+      "game_team": "넥센",
+      "home_team": "넥센",
+      "home_score": 7,
+      "away_team": "SK",
+      "away_score": 2,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "二",
+          "name": "서건창",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "중",
+          "name": "이택근",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "우",
+          "name": "유한준",
+          "rbi": 3,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "-",
+          "name": "박병호",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "유",
+          "name": "강정호",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "三",
+          "name": "김민성",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "지",
+          "name": "이성열",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "좌",
+          "name": "문우람",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "포",
+          "name": "박동원",
+          "rbi": 0,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m04",
+      "theme": "2023 한국시리즈 우승 (LG 29년만)",
+      "date": "2023.11.13",
+      "game_team": "LG",
+      "home_team": "LG",
+      "home_score": 6,
+      "away_team": "KT",
+      "away_score": 2,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "우",
+          "name": "홍창기",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "중",
+          "name": "박해민",
+          "rbi": 2,
+          "sb": 2
+        },
+        {
+          "order": 3,
+          "position": "지",
+          "name": "김현수",
+          "rbi": 3,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "-",
+          "name": "오스틴",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "유",
+          "name": "오지환",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "三",
+          "name": "문보경",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "포",
+          "name": "박동원",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "좌",
+          "name": "문성주",
+          "rbi": 1,
+          "sb": 1
+        },
+        {
+          "order": 9,
+          "position": "二",
+          "name": "신민재",
+          "rbi": 0,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m06",
+      "theme": "이대호 은퇴 경기",
+      "date": "2022.10.8",
+      "game_team": "롯데",
+      "home_team": "롯데",
+      "home_score": 3,
+      "away_team": "LG",
+      "away_score": 2,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "중",
+          "name": "황성빈",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "좌",
+          "name": "렉스",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "지",
+          "name": "전준우",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "-",
+          "name": "이대호",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "우",
+          "name": "고승민",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "三",
+          "name": "한동희",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "二",
+          "name": "안치홍",
+          "rbi": 0,
+          "sb": 1
+        },
+        {
+          "order": 8,
+          "position": "포",
+          "name": "정보근",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "유",
+          "name": "박승욱",
+          "rbi": 0,
+          "sb": 1
+        }
+      ]
+    },
+    {
+      "id": "m07",
+      "theme": "2020 한국시리즈 우승 (NC 창단 첫 우승)",
+      "date": "2020.11.24",
+      "game_team": "NC",
+      "home_team": "NC",
+      "home_score": 4,
+      "away_team": "두산",
+      "away_score": 2,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "二",
+          "name": "박민우",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "지",
+          "name": "이명기",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "우",
+          "name": "나성범",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "포",
+          "name": "양의지",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "중",
+          "name": "알테어",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "三",
+          "name": "박석민",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "유",
+          "name": "노진혁",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "-",
+          "name": "강진성",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "좌",
+          "name": "권희동",
+          "rbi": 0,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m08",
+      "theme": "강정호 20-20 달성",
+      "date": "2012.9.18",
+      "game_team": "넥센",
+      "home_team": "LG",
+      "home_score": 0,
+      "away_team": "넥센",
+      "away_score": 1,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "중",
+          "name": "장민석",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "二",
+          "name": "서건창",
+          "rbi": 0,
+          "sb": 1
+        },
+        {
+          "order": 3,
+          "position": "지",
+          "name": "강정호",
+          "rbi": 1,
+          "sb": 2
+        },
+        {
+          "order": 4,
+          "position": "-",
+          "name": "박병호",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "우",
+          "name": "이성열",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "三",
+          "name": "김민우",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "유",
+          "name": "김민성",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "포",
+          "name": "허도환",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "좌",
+          "name": "문우람",
+          "rbi": 0,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m09",
+      "theme": "추신수 SSG 데뷔전",
+      "date": "2021.4.4",
+      "game_team": "SSG",
+      "home_team": "SSG",
+      "home_score": 5,
+      "away_team": "롯데",
+      "away_score": 3,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "중",
+          "name": "최지훈",
+          "rbi": 0,
+          "sb": 1
+        },
+        {
+          "order": 2,
+          "position": "-",
+          "name": "로맥",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "지",
+          "name": "추신수",
+          "rbi": 0,
+          "sb": 1
+        },
+        {
+          "order": 4,
+          "position": "三",
+          "name": "최정",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "二",
+          "name": "최주환",
+          "rbi": 3,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "우",
+          "name": "한유섬",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "좌",
+          "name": "오태곤",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "포",
+          "name": "이재원",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "유",
+          "name": "박성한",
+          "rbi": 0,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m10",
+      "theme": "이대호 롯데 복귀 후 첫 경기",
+      "date": "2017.3.31",
+      "game_team": "롯데",
+      "home_team": "NC",
+      "home_score": 6,
+      "away_team": "롯데",
+      "away_score": 5,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "중",
+          "name": "전준우",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "二",
+          "name": "번즈",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "우",
+          "name": "손아섭",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "-",
+          "name": "이대호",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "지",
+          "name": "최준석",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "포",
+          "name": "강민호",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "좌",
+          "name": "김문호",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "유",
+          "name": "신본기",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "三",
+          "name": "문규현",
+          "rbi": 0,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m11",
+      "theme": "박찬호 한화 데뷔(국내 첫 등판)",
+      "date": "2012.4.12",
+      "game_team": "한화",
+      "home_team": "한화",
+      "home_score": 8,
+      "away_team": "두산",
+      "away_score": 2,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "중",
+          "name": "강동우",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "二",
+          "name": "한상훈",
+          "rbi": 3,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "지",
+          "name": "장성호",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "-",
+          "name": "김태균",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "좌",
+          "name": "최진행",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "우",
+          "name": "연경흠",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "유",
+          "name": "이대수",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "포",
+          "name": "신경현",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "三",
+          "name": "이여상",
+          "rbi": 0,
+          "sb": 1
+        }
+      ]
+    },
+    {
+      "id": "m12",
+      "theme": "이정후 넥센 데뷔 시즌 개막전",
+      "date": "2017.3.31",
+      "game_team": "넥센",
+      "home_team": "넥센",
+      "home_score": 1,
+      "away_team": "LG",
+      "away_score": 2,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "二",
+          "name": "서건창",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "우",
+          "name": "이택근",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "-",
+          "name": "채태인",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "지",
+          "name": "윤석민",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "좌",
+          "name": "대니돈",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "三",
+          "name": "김민성",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "중",
+          "name": "고종욱",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "유",
+          "name": "김하성",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "포",
+          "name": "박동원",
+          "rbi": 0,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m13",
+      "theme": "에릭 테임즈 40-40 달성",
+      "date": "2015.10.2",
+      "game_team": "NC",
+      "home_team": "SK",
+      "home_score": 2,
+      "away_team": "NC",
+      "away_score": 9,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "좌",
+          "name": "김종호",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "중",
+          "name": "김준완",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "二",
+          "name": "박민우",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "지",
+          "name": "테임즈",
+          "rbi": 4,
+          "sb": 1
+        },
+        {
+          "order": 5,
+          "position": "우",
+          "name": "나성범",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "-",
+          "name": "조영훈",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "三",
+          "name": "모창민",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "유",
+          "name": "손시헌",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "포",
+          "name": "김태군",
+          "rbi": 0,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m14",
+      "theme": "NC 다이노스 창단 첫 승",
+      "date": "2013.4.11",
+      "game_team": "NC",
+      "home_team": "LG",
+      "home_score": 1,
+      "away_team": "NC",
+      "away_score": 4,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "우",
+          "name": "김종호",
+          "rbi": 0,
+          "sb": 1
+        },
+        {
+          "order": 2,
+          "position": "二",
+          "name": "차화준",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "-",
+          "name": "조영훈",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "지",
+          "name": "이호준",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "중",
+          "name": "권희동",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "좌",
+          "name": "조평호",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "三",
+          "name": "이현곤",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "유",
+          "name": "노진혁",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "포",
+          "name": "김태군",
+          "rbi": 0,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m15",
+      "theme": "KT wiz 창단 첫 승",
+      "date": "2015.4.11",
+      "game_team": "KT",
+      "home_team": "넥센",
+      "home_score": 4,
+      "away_team": "KT",
+      "away_score": 6,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "중",
+          "name": "이대형",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "-",
+          "name": "신명철",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "二",
+          "name": "박경수",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "三",
+          "name": "마르테",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "지",
+          "name": "김동욱",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "좌",
+          "name": "김상현",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "우",
+          "name": "김지열",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "포",
+          "name": "용덕한",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "유",
+          "name": "박기혁",
+          "rbi": 1,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m16",
+      "theme": "양준혁 은퇴 경기",
+      "date": "2010.9.19",
+      "game_team": "삼성",
+      "home_team": "삼성",
+      "home_score": 0,
+      "away_team": "SK",
+      "away_score": 3,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "중",
+          "name": "배영섭",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "유",
+          "name": "김상수",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "-",
+          "name": "양준혁",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "지",
+          "name": "박석민",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "좌",
+          "name": "최형우",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "우",
+          "name": "강봉규",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "二",
+          "name": "신명철",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "포",
+          "name": "현재윤",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "三",
+          "name": "손주인",
+          "rbi": 0,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m17",
+      "theme": "LG vs 넥센 22:17 난타전",
+      "date": "2009.5.15",
+      "game_team": "LG",
+      "home_team": "넥센",
+      "home_score": 17,
+      "away_team": "LG",
+      "away_score": 22,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "좌",
+          "name": "박용택",
+          "rbi": 3,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "중",
+          "name": "이대형",
+          "rbi": 0,
+          "sb": 2
+        },
+        {
+          "order": 3,
+          "position": "三",
+          "name": "정성훈",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "-",
+          "name": "페타지니",
+          "rbi": 5,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "우",
+          "name": "이진영",
+          "rbi": 5,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "지",
+          "name": "최동수",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "二",
+          "name": "박용근",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "포",
+          "name": "김정민",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "유",
+          "name": "권용관",
+          "rbi": 4,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m18",
+      "theme": "삼성 4회 연속 우승 시즌",
+      "date": "2014.11.11",
+      "game_team": "삼성",
+      "home_team": "넥센",
+      "home_score": 1,
+      "away_team": "삼성",
+      "away_score": 11,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "二",
+          "name": "나바로",
+          "rbi": 5,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "우",
+          "name": "박한이",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "-",
+          "name": "채태인",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "좌",
+          "name": "최형우",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "三",
+          "name": "박석민",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "지",
+          "name": "이승엽",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "중",
+          "name": "김헌곤",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "포",
+          "name": "이지영",
+          "rbi": 0,
+          "sb": 1
+        },
+        {
+          "order": 9,
+          "position": "유",
+          "name": "김상수",
+          "rbi": 0,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m19",
+      "theme": "한화 vs 두산 최장 이닝 무득점 경기",
+      "date": "2008.9.3",
+      "game_team": "두산",
+      "home_team": "두산",
+      "home_score": 1,
+      "away_team": "한화",
+      "away_score": 0,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "중",
+          "name": "이종욱",
+          "rbi": 0,
+          "sb": 1
+        },
+        {
+          "order": 2,
+          "position": "二",
+          "name": "고영민",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "좌",
+          "name": "김현수",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "三",
+          "name": "김동주",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "지",
+          "name": "홍성흔",
+          "rbi": 0,
+          "sb": 1
+        },
+        {
+          "order": 6,
+          "position": "-",
+          "name": "최준석",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "유",
+          "name": "이대수",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "포",
+          "name": "채상병",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "우",
+          "name": "전상렬",
+          "rbi": 0,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m20",
+      "theme": "김도영 30-30 달성",
+      "date": "2024.8.15",
+      "game_team": "KIA",
+      "home_team": "키움",
+      "home_score": 1,
+      "away_team": "KIA",
+      "away_score": 12,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "유",
+          "name": "박찬호",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "二",
+          "name": "김선빈",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "三",
+          "name": "김도영",
+          "rbi": 2,
+          "sb": 1
+        },
+        {
+          "order": 4,
+          "position": "중",
+          "name": "소크라테스",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "우",
+          "name": "나성범",
+          "rbi": 5,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "지",
+          "name": "이우성",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "-",
+          "name": "변우혁",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "포",
+          "name": "김태군",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "좌",
+          "name": "이창진",
+          "rbi": 1,
+          "sb": 1
+        }
+      ]
+    },
+    {
+      "id": "m21",
+      "theme": "김광현 SSG 복귀전",
+      "date": "2022.4.9",
+      "game_team": "SSG",
+      "home_team": "SSG",
+      "home_score": 9,
+      "away_team": "KIA",
+      "away_score": 5,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "지",
+          "name": "추신수",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "좌",
+          "name": "최지훈",
+          "rbi": 0,
+          "sb": 1
+        },
+        {
+          "order": 3,
+          "position": "三",
+          "name": "최정",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "우",
+          "name": "한유섬",
+          "rbi": 5,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "二",
+          "name": "최주환",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "-",
+          "name": "크론",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "유",
+          "name": "박성한",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "포",
+          "name": "이재원",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "중",
+          "name": "김강민",
+          "rbi": 0,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m22",
+      "theme": "2015 한국시리즈 우승(두산)",
+      "date": "2015.10.31",
+      "game_team": "두산",
+      "home_team": "두산",
+      "home_score": 13,
+      "away_team": "삼성",
+      "away_score": 2,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "三",
+          "name": "허경민",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "지",
+          "name": "정수빈",
+          "rbi": 4,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "중",
+          "name": "민병헌",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "좌",
+          "name": "김현수",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "포",
+          "name": "양의지",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "우",
+          "name": "박건우",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "二",
+          "name": "오재원",
+          "rbi": 1,
+          "sb": 2
+        },
+        {
+          "order": 8,
+          "position": "-",
+          "name": "고영민",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "유",
+          "name": "김재호",
+          "rbi": 1,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m23",
+      "theme": "김재환 40홈런 달성 경기",
+      "date": "2018.9.12",
+      "game_team": "두산",
+      "home_team": "롯데",
+      "home_score": 9,
+      "away_team": "두산",
+      "away_score": 13,
+      "tmi": "",
+      "lineup": [
+        {
+          "order": 1,
+          "position": "三",
+          "name": "허경민",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 2,
+          "position": "좌",
+          "name": "정진호",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 3,
+          "position": "二",
+          "name": "오재원",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 4,
+          "position": "지",
+          "name": "김재환",
+          "rbi": 5,
+          "sb": 0
+        },
+        {
+          "order": 5,
+          "position": "포",
+          "name": "양의지",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 6,
+          "position": "-",
+          "name": "오재일",
+          "rbi": 1,
+          "sb": 0
+        },
+        {
+          "order": 7,
+          "position": "유",
+          "name": "김재호",
+          "rbi": 2,
+          "sb": 0
+        },
+        {
+          "order": 8,
+          "position": "우",
+          "name": "김인태",
+          "rbi": 0,
+          "sb": 0
+        },
+        {
+          "order": 9,
+          "position": "중",
+          "name": "정수빈",
+          "rbi": 5,
+          "sb": 0
+        }
+      ]
+    },
+    {
+      "id": "m24",
+      "theme": "2008 베이징 올림픽 야구 금메달 결정전 (한국 vs 쿠바)",
+      "date": "2008.8.23",
+      "game_team": "대한민국",
+      "home_team": "대한민국",
+      "home_score": 3,
+      "away_team": "쿠바",
+      "away_score": 2,
+      "tmi": "정대현이 마지막 타자 율리에스키 구리엘을 상대로 유격수 병살타를 유도하며 경기를 끝냈다. 한국 야구 사상 최초의 올림픽 금메달이자, 9전 전승 우승이었다.",
+      "lineup": [
+        {"order": 1, "position": "중", "name": "이종욱", "rbi": 0, "sb": 0},
+        {"order": 2, "position": "우", "name": "이용규", "rbi": 1, "sb": 0},
+        {"order": 3, "position": "좌", "name": "김현수", "rbi": 0, "sb": 0},
+        {"order": 4, "position": "-", "name": "이승엽", "rbi": 2, "sb": 0},
+        {"order": 5, "position": "三", "name": "김동주", "rbi": 0, "sb": 0},
+        {"order": 6, "position": "지", "name": "이대호", "rbi": 0, "sb": 0},
+        {"order": 7, "position": "二", "name": "고영민", "rbi": 0, "sb": 0},
+        {"order": 8, "position": "포", "name": "강민호", "rbi": 0, "sb": 0},
+        {"order": 9, "position": "유", "name": "박진만", "rbi": 0, "sb": 0},
+        {"order": "SP", "position": "투", "name": "류현진", "rbi": 0, "sb": 0}
       ]
     }
   ]
