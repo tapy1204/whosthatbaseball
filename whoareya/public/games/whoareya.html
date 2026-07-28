@@ -119,8 +119,8 @@
         <span class="cell-cap">지명</span>
       </div>
       <div class="cell">
-        <span class="badge">#54<b class="arw">↑</b></span>
-        <span class="cell-cap">등번호</span>
+        <span class="badge badge-compact">좌투좌타</span>
+        <span class="cell-cap">투타</span>
       </div>
     </div>
 
@@ -146,7 +146,7 @@
           <li><b>출생연도</b> · 정답보다 높으면 ↓, 낮으면 ↑ 표시</li>
           <li><b>고교(출신 권역)</b> · 출신 고등학교가 속한 권역</li>
           <li><b>지명 구단</b> · 신인 지명 당시 소속됐던 구단</li>
-          <li><b>등번호</b> · 정답보다 높으면 ↓, 낮으면 ↑ 표시</li>
+          <li><b>투타</b> · 투구 · 타격 방향 (예: 우투우타)</li>
         </ul>
 
         <div class="howto-div"></div>
@@ -159,7 +159,7 @@
           </li>
           <li>
             <span class="dot dot-dir">↑↓</span>
-            출생연도·등번호가 다르지만 방향을 알려줌
+            출생연도가 다르지만 방향을 알려줌
           </li>
           <li>
             <span class="dot dot-miss"></span>
@@ -206,7 +206,7 @@
       </li>
       <li>
         <span class="dot dot-dir">↑↓</span>
-        정답이 더 높음 / 낮음 (출생·등번호)
+        정답이 더 높음 / 낮음 (출생연도)
       </li>
       <li>
         <span class="dot dot-miss"></span>
@@ -234,7 +234,7 @@
   // ── 설정 ──────────────────────────────────────
   const MAX_TRIES   = 8;
   const STORE_KEY   = 'wtb_whoareya';
-  const EPOCH       = Date.UTC(2026, 6, 23); // 2026-07-28 = #001
+  const EPOCH       = Date.UTC(2026, 6, 28); // 2026-07-28 = #001
   const SITE_URL    = 'whosthatbaseball.com';
   // 날짜순 정답 선수 번호 (순서대로, 계속 채워두기)
   const SCHEDULE = [
@@ -246,12 +246,12 @@
   ];
 
   const FIELDS = [
-    { key: 'team',         cap: '구단',   type: 'match' },
-    { key: 'position',     cap: '포지션', type: 'match' },
-    { key: 'birth_year',   cap: '출생',   type: 'num'   },
-    { key: 'school_region',cap: '고교',   type: 'match' },
-    { key: 'draft_team',   cap: '지명',   type: 'match' },
-    { key: 'number',       cap: '등번호', type: 'num'   },
+    { key: 'team',           cap: '구단',   type: 'match' },
+    { key: 'position',       cap: '포지션', type: 'match' },
+    { key: 'birth_year',     cap: '출생',   type: 'num'   },
+    { key: 'school_region',  cap: '고교',   type: 'match' },
+    { key: 'draft_team',     cap: '지명',   type: 'match' },
+    { key: 'position_detail',cap: '투타',   type: 'match' },
   ];
 
   // ── 상태 ──────────────────────────────────────
@@ -302,9 +302,7 @@
       }
 
       if (f.type === 'num') {
-        const text = f.key === 'birth_year'
-          ? String(gv).slice(-2)
-          : '#' + gv;
+        const text = String(gv).slice(-2);
         if (gv === av)  return { state: 'hit',  text, arrow: '' };
         if (gv <  av)   return { state: 'dir',  text, arrow: '↑' };
         return              { state: 'dir',  text, arrow: '↓' };
@@ -387,6 +385,11 @@
           b.dataset.label = c.text;   // 값 보관
           b.classList.add('logo-only'); // 글자 숨김용 클래스
         }
+      }
+
+      // 투타(i===5)는 4글자라 배지 폭에 맞춰 축소
+      if (i === 5) {
+        b.classList.add('badge-compact');
       }
 
       b.textContent = c.text;

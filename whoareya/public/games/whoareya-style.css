@@ -396,6 +396,10 @@ html, body {
   color: transparent !important;
   text-shadow: none !important;
 }
+.badge.badge-compact {
+  font-size: 13.5px;
+  letter-spacing: -0.04em;
+}
 .badge.is-hit { background: var(--hit); }
 .badge .arw {
   font-size: 14px;
@@ -641,6 +645,7 @@ html, body {
 /* ── 반응형 ───────────────────────────── */
 @media (max-width: 380px) {
   .badge { font-size: 11px; }
+  .badge.badge-compact { font-size: 10px; }
   .intro-title { font-size: 23px; }
   .hdr-title { font-size: 20px; }
 }
