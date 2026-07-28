@@ -127,21 +127,21 @@
   // ── 설정 ──────────────────────────────
   const MAX_TRIES = 6;
   const STORE_KEY = 'wtb_missing9';
-  const EPOCH     = Date.UTC(2026, 6, 27);
+  const EPOCH     = Date.UTC(2026, 6, 26); // 2026-07-28 = #001
   const SITE_URL  = 'whosthatbaseball.com';
 
-  // 그라운드 슬롯 좌표 (타순 1~9 → % 위치)
+  // 그라운드 슬롯 좌표 (수비 위치 → % 위치)
   const SLOT_POS = {
-    7: { x: 50, y: 15 },   // 중견수 (맨 위 중앙)
-    1: { x: 22, y: 26 },   // 좌익수
-    2: { x: 78, y: 26 },   // 우익수
-    8: { x: 38, y: 42 },   // 유격 (다이아 좌상)
-    6: { x: 62, y: 42 },   // 2루 (다이아 우상)
-    4: { x: 24, y: 60 },   // 3루 (좌)
-    5: { x: 76, y: 60 },   // 1루 (우)
-    3: { x: 16, y: 80 },   // 지명 (좌하)
-    9: { x: 50, y: 82 },   // 포수 (하단 중앙)
-    'SP': { x: 50, y: 50 }, // 투수 (마운드 중앙, 국가대표전 등 예외 라인업용)
+    '중': { x: 50, y: 15 },   // 중견수 (맨 위 중앙)
+    '좌': { x: 22, y: 26 },   // 좌익수
+    '우': { x: 78, y: 26 },   // 우익수
+    '유': { x: 38, y: 42 },   // 유격 (다이아 좌상)
+    '二': { x: 62, y: 42 },   // 2루 (다이아 우상)
+    '三': { x: 24, y: 60 },   // 3루 (좌)
+    '-':  { x: 76, y: 60 },   // 1루 (우)
+    '지': { x: 16, y: 80 },   // 지명 (좌하, 수비 위치가 없어 벤치 쪽에 배치)
+    '포': { x: 50, y: 82 },   // 포수 (하단 중앙)
+    '투': { x: 50, y: 50 },   // 투수 (마운드 중앙, 국가대표전 등 예외 라인업용)
   };
 
   // 팀 한글명 → 영어 키 매핑
@@ -266,7 +266,7 @@
     [...el.field.querySelectorAll('.slot')].forEach(s => s.remove());
 
     lineup.forEach((s, idx) => {
-      const pos = SLOT_POS[s.order];
+      const pos = SLOT_POS[s.position] || SLOT_POS['지'];
       const slot = document.createElement('div');
       slot.className = 'slot' +
         (s.status === 'solved' ? ' is-solved' :
@@ -764,7 +764,12 @@
       el.matchTheme.textContent = '데이터를 불러오지 못했어요';
       return;
     }
-    allGames = data.games || [];
+    // id 순서대로(m01, m02, m03 ...) 정렬 -> 날짜 인덱스와 무관하게 항상 id 오름차순 진행
+    allGames = (data.games || []).slice().sort((a, b) => {
+      const na = parseInt(String(a.id).replace(/\D/g, ''), 10);
+      const nb = parseInt(String(b.id).replace(/\D/g, ''), 10);
+      return na - nb;
+    });
     if (!allGames.length) { el.matchTheme.textContent = '경기가 없어요'; return; }
 
     const idx = kstDayIndex();
