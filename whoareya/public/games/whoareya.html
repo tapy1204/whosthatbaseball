@@ -142,7 +142,7 @@
         <p class="detail-label">6가지 속성</p>
         <ul class="detail-list">
           <li><b>구단</b> · 현재 소속 구단</li>
-          <li><b>포지션</b> · 투수 / 내야수 / 외야수</li>
+          <li><b>포지션</b> · 투수 / 포수 / 내야수 / 외야수</li>
           <li><b>투타</b> · 투구 · 타격 방향 (예: 우투우타)</li>
           <li><b>지명 구단</b> · 신인 지명 당시 소속됐던 구단</li>
           <li><b>고교(출신 권역)</b> · 출신 고등학교가 속한 권역</li>
@@ -172,7 +172,8 @@
         <p class="detail-label">포지션 구분</p>
         <ul class="detail-list">
           <li><b>투수</b> · 투수</li>
-          <li><b>내야수</b> · 1루수, 2루수, 3루수, 유격수, 포수</li>
+          <li><b>포수</b> · 포수</li>
+          <li><b>내야수</b> · 1루수, 2루수, 3루수, 유격수</li>
           <li><b>외야수</b> · 좌익수, 중견수, 우익수</li>
         </ul>
 
@@ -385,6 +386,7 @@
       if (i === 1) {
         const posMap = {
           '투수': 'badge-pitcher',
+          '포수': 'badge-catcher',
           '내야': 'badge-infield',
           '외야': 'badge-outfield'
         };

@@ -446,10 +446,20 @@ html, body {
 .badge-chungcheong { --bg-img: url('../image/map/충청2.png'); }
 .badge-honam { --bg-img: url('../image/map/호남2.png'); }
 
+.badge-capital::before,
+.badge-gangwon::before,
+.badge-yeongnam::before,
+.badge-jeju::before,
+.badge-chungcheong::before,
+.badge-honam::before {
+  background-size: 100%;
+}
+
 /* 포지션 이미지 */
 .badge-pitcher { --bg-img: url('../image/position/투수3.png'); }
 .badge-infield { --bg-img: url('../image/position/내야.png'); }
 .badge-outfield { --bg-img: url('../image/position/외야.png'); }
+.badge-catcher { --bg-img: url('../image/position/포수.jpeg'); }
 
 /* 구단 로고 */
 .badge-lg { --bg-img: url('../image/team/lg.png'); }
