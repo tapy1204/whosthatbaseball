@@ -72,7 +72,6 @@
 
   <!-- 공유 버튼 -->
   <div class="share" id="share" hidden>
-    <button class="btn btn-retry" type="button" id="btnRetry">↻ 다시 도전</button>
     <button class="btn btn-kakao" type="button" id="btnKakao"><span class="kakao-mark">K</span> 카카오톡</button>
     <button class="btn btn-ghost" type="button" id="btnCopy">결과 공유</button>
   </div>
@@ -127,7 +126,7 @@
   // ── 설정 ──────────────────────────────
   const MAX_TRIES = 6;
   const STORE_KEY = 'wtb_missing9';
-  const EPOCH     = Date.UTC(2026, 6, 26); // 2026-07-28 = #001
+  const EPOCH     = Date.UTC(2026, 6, 17); // 2026-07-28 = #001
   const SITE_URL  = 'whosthatbaseball.com';
 
   // 그라운드 슬롯 좌표 (수비 위치 → % 위치)
@@ -229,7 +228,7 @@
     progress:$('progress'),
     tmi:$('tmi'), tmiTheme:$('tmiTheme'), tmiBody:$('tmiBody'),
     sharebox:$('sharebox'), shareLabel:$('shareLabel'), shareCnt:$('shareCnt'), emojiBar:$('emojiBar'),
-    share:$('share'), btnRetry:$('btnRetry'), btnKakao:$('btnKakao'), btnCopy:$('btnCopy'),
+    share:$('share'), btnKakao:$('btnKakao'), btnCopy:$('btnCopy'),
     howto:$('howto'), actions:$('actions'), btnBack:$('btnBack'), btnGiveup:$('btnGiveup'),
     navNo:$('navNo'), navPrev:$('navPrev'), navNext:$('navNext'), toast:$('toast'),
   };
@@ -611,32 +610,6 @@
   }
 
   // ── 이벤트 ────────────────────────────
-  // ── 재도전 ────────────────────────────
-  function resetGame() {
-    over = false;
-    activeIdx = -1;
-    curInput = [];
-    lineup.forEach(s => {
-      s.status = 'idle';
-      s.tries = [];
-      s.preview = '';
-    });
-
-    el.tmi.hidden = true;
-    el.sharebox.hidden = true;
-    el.share.hidden = true;
-    el.howto.hidden = false;
-    el.now.hidden = true;
-    el.wordle.hidden = true;
-    el.fieldWrap.hidden = false;
-    el.actions.hidden = true;
-
-    save();
-    renderField();
-    renderProgress();
-  }
-
-  el.btnRetry.addEventListener('click', resetGame);
   el.btnBack.addEventListener('click', closeWordle);
   el.btnGiveup.addEventListener('click', () => {
     const s = lineup[activeIdx];
@@ -729,8 +702,13 @@
     el.matchNo.textContent = no;
     el.navNo.textContent = no;
     el.matchTheme.textContent = game.theme;
+    const homeIsTarget = game.home_team === game.game_team;
+    const homeCls = homeIsTarget ? 'matchunit target' : 'matchunit';
+    const awayCls = homeIsTarget ? 'matchunit' : 'matchunit target';
     el.matchMeta.innerHTML =
-      `${game.date} · <span class="home">${game.home_team} ${game.home_score}</span> vs <span class="score">${game.away_score} ${game.away_team}</span>`;
+      `${game.date} · ` +
+      `<span class="${homeCls}">${game.home_team} ${game.home_score}</span> vs ` +
+      `<span class="${awayCls}">${game.away_score} ${game.away_team}</span>`;
 
     // PREV/NEXT 버튼 활성/비활성 표시
     el.navPrev.disabled = (idx <= 0);

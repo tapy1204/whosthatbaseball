@@ -167,8 +167,15 @@ html, body {
   font-weight: 600;
   color: var(--muted);
 }
-.matchbar-meta .home { color: var(--accent); font-weight: 800; }
-.matchbar-meta .score { color: #fff; font-weight: 800; }
+.matchbar-meta .matchunit { color: #fff; font-weight: 800; }
+.matchbar-meta .matchunit.target {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--accent);
+  border: 1px solid var(--accent-dk);
+}
 
 
 /* ── 현재 입력 중인 선수 (워들 상단 고정) ── */
