@@ -17,9 +17,6 @@
   --field:     #3f7d4e;      /* 야구장 잔디 */
   --field-dk:  #2e5f3a;      /* 잔디 어두운 부분 */
   --dirt:      #b08a5a;      /* 내야 흙 */
-  --jersey:    #e8613a;      /* 유니폼 오렌지 */
-  --jersey-dk: #7a2a1a;      /* 실패 유니폼 (어두운 빨강) */
-
   --wd-green:  #4caf6d;      /* 워들: 자리·글자 정확 */
   --wd-yellow: #e8b84a;      /* 워들: 있지만 자리 다름 */
   --wd-gray:   #2f2f48;      /* 워들: 없는 글자 */
@@ -29,6 +26,9 @@
   --accent:    #e8613a;      /* 팀 컬러 기본값 (JS가 게임마다 덮어씀) */
   --accent-dk: #7a2a1a;      /* 팀 컬러 어두운 버전 (실패 상태) */
   --accent-lt: #e8b84a;      /* 팀 컬러 밝은 버전 (배지 강조, JS가 덮어씀) */
+
+  --jersey:    var(--accent);      /* 유니폼 색 = 팀 컬러 (게임마다 JS가 --accent를 덮어쓰면 같이 바뀜) */
+  --jersey-dk: var(--accent-dk);   /* 실패 유니폼 = 팀 컬러 어두운 버전 */
 
   --text:      #ececf5;
   --muted:     #8a8ab0;
@@ -195,10 +195,11 @@ html, body {
   position: absolute; top: -8px; left: -8px;
   width: 22px; height: 22px;
   border-radius: 50%;
-  background: var(--ordere);
-  color: var(--wd-yellow);
+  background: var(--order-badge);
+  color: var(--accent-lt);
   font-size: 12px; font-weight: 900;
   display: grid; place-items: center;
+  border: 1.5px solid var(--accent-lt);
 }
 .now-info .now-role { font-size: 16px; font-weight: 900; color: #fff; }
 .now-info .now-try  { font-size: 13px; color: var(--muted); margin-top: 2px; }
@@ -299,10 +300,10 @@ html, body {
   width: 22px; height: 22px;
   border-radius: 50%;
   background: var(--order-badge);
-  color: var(--wd-yellow);
+  color: var(--accent-lt);
   font-size: 12px; font-weight: 900;
   display: grid; place-items: center;
-  border: 1.5px solid #e8b84a;
+  border: 1.5px solid var(--accent-lt);
 }
 /* 이름표 (진행중 미니 프리뷰 / 완료 이름) */
 .slot-name {
@@ -326,8 +327,8 @@ html, body {
 }
 .slot.is-progress .slot-name {
   background: rgba(20,20,30,.55);
-  border: 1px solid var(--wd-yellow);
-  color: var(--wd-yellow);
+  border: 1px solid var(--accent-lt);
+  color: var(--accent-lt);
   letter-spacing: 1px;
 }
 .slot-empty {
@@ -348,7 +349,7 @@ html, body {
   padding: 2px 7px 2px 5px;
   border-radius: 999px;
   font-size: 11px; font-weight: 900;
-  color: var(--wd-yellow);
+  color: var(--accent-lt);
   white-space: nowrap;
 }
 .slot-stat svg,
@@ -421,7 +422,7 @@ html, body {
   margin-bottom: 10px;
 }
 .howto-line b { color: #fff; }
-.howto-line .accent { color: var(--wd-yellow); font-weight: 800; }
+.howto-line .accent { color: var(--accent-lt); font-weight: 800; }
 .howto-mini {
   width: 30px; height: 30px; border-radius: 8px;
   background: var(--jersey); color: #fff;
@@ -432,13 +433,13 @@ html, body {
 .howto-mini .m-order {
   position: absolute; top: -6px; left: -6px;
   width: 17px; height: 17px; border-radius: 50%;
-  background: var(--order-badge); color: var(--wd-yellow);
+  background: var(--order-badge); color: var(--accent-lt);
   font-size: 9px; font-weight: 900;
   display: grid; place-items: center;
 }
 .howto-stat-ic {
   width: 26px; height: 26px; border-radius: 6px;
-  background: var(--order-badge); color: var(--wd-yellow);
+  background: var(--order-badge); color: var(--accent-lt);
   display: grid; place-items: center; flex: none;
 }
 .howto-stat-ic svg,
