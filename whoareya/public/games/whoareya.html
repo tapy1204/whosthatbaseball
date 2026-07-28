@@ -107,20 +107,20 @@
         <span class="cell-cap">포지션</span>
       </div>
       <div class="cell">
-        <span class="badge">06<b class="arw">↓</b></span>
-        <span class="cell-cap">출생</span>
-      </div>
-      <div class="cell">
-        <span class="badge is-hit badge-region badge-capital">수도</span>
-        <span class="cell-cap">고교</span>
+        <span class="badge badge-compact">우투우타</span>
+        <span class="cell-cap">투타</span>
       </div>
       <div class="cell">
         <span class="badge badge-region badge-team badge-lotte logo-only">롯데</span>
         <span class="cell-cap">지명</span>
       </div>
       <div class="cell">
-        <span class="badge badge-compact">좌투좌타</span>
-        <span class="cell-cap">투타</span>
+        <span class="badge is-hit badge-region badge-capital">수도</span>
+        <span class="cell-cap">고교</span>
+      </div>
+      <div class="cell">
+        <span class="badge">06<b class="arw">↓</b></span>
+        <span class="cell-cap">출생</span>
       </div>
     </div>
 
@@ -143,10 +143,10 @@
         <ul class="detail-list">
           <li><b>구단</b> · 현재 소속 구단</li>
           <li><b>포지션</b> · 투수 / 내야수 / 외야수</li>
-          <li><b>출생연도</b> · 정답보다 높으면 ↓, 낮으면 ↑ 표시</li>
-          <li><b>고교(출신 권역)</b> · 출신 고등학교가 속한 권역</li>
-          <li><b>지명 구단</b> · 신인 지명 당시 소속됐던 구단</li>
           <li><b>투타</b> · 투구 · 타격 방향 (예: 우투우타)</li>
+          <li><b>지명 구단</b> · 신인 지명 당시 소속됐던 구단</li>
+          <li><b>고교(출신 권역)</b> · 출신 고등학교가 속한 권역</li>
+          <li><b>출생연도</b> · 정답보다 높으면 ↓, 낮으면 ↑ 표시</li>
         </ul>
 
         <div class="howto-div"></div>
@@ -248,10 +248,10 @@
   const FIELDS = [
     { key: 'team',           cap: '구단',   type: 'match' },
     { key: 'position',       cap: '포지션', type: 'match' },
-    { key: 'birth_year',     cap: '출생',   type: 'num'   },
-    { key: 'school_region',  cap: '고교',   type: 'match' },
-    { key: 'draft_team',     cap: '지명',   type: 'match' },
     { key: 'position_detail',cap: '투타',   type: 'match' },
+    { key: 'draft_team',     cap: '지명',   type: 'match' },
+    { key: 'school_region',  cap: '고교',   type: 'match' },
+    { key: 'birth_year',     cap: '출생',   type: 'num'   },
   ];
 
   // ── 상태 ──────────────────────────────────────
@@ -345,8 +345,8 @@
         b.style.animationDelay = (i * 0.25) + 's';
       }
 
-      // 고교(i===3) 배지이고 값이 '수도'면 수도권 배경 이미지 표시
-      if (i === 3) {
+      // 고교(i===4) 배지이고 값이 '수도'면 수도권 배경 이미지 표시
+      if (i === 4) {
       const regionMap = {
       '수도': 'badge-capital',
       '강원': 'badge-gangwon',
@@ -372,8 +372,8 @@
         }
       }
 
-      // 구단(i===0) / 지명(i===4) 로고
-      if (i === 0 || i === 4) {
+      // 구단(i===0) / 지명(i===3) 로고
+      if (i === 0 || i === 3) {
         const teamMap = {
           'LG': 'badge-lg', 'KT': 'badge-kt', 'SSG': 'badge-ssg',
           'NC': 'badge-nc', '두산': 'badge-doosan', 'KIA': 'badge-kia',
@@ -387,8 +387,8 @@
         }
       }
 
-      // 투타(i===5)는 4글자라 배지 폭에 맞춰 축소
-      if (i === 5) {
+      // 투타(i===2)는 4글자라 배지 폭에 맞춰 축소
+      if (i === 2) {
         b.classList.add('badge-compact');
       }
 
