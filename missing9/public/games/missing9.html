@@ -143,11 +143,20 @@
     '투': { x: 50, y: 50 },   // 투수 (마운드 중앙, 국가대표전 등 예외 라인업용)
   };
 
-  // 팀 한글명 → 영어 키 매핑
+  // 팀 한글명 → 영어 키 매핑 (현재 10개 구단)
   const TEAM_KEY = {
-    'LG': 'lg', '한화': 'hanwha', 'SSG': 'ssg', 'SK': 'ssg', '삼성': 'samsung', 'NC': 'nc',
-    'kt': 'kt', 'KT': 'kt', '롯데': 'lotte', 'KIA': 'kia', '두산': 'doosan',
-    '키움': 'kiwoom', '넥센': 'kiwoom',
+    'LG': 'lg', '한화': 'hanwha', 'SSG': 'ssg', '삼성': 'samsung', 'NC': 'nc',
+    'kt': 'kt', 'KT': 'kt', '롯데': 'lotte', 'KIA': 'kia', '두산': 'doosan', '키움': 'kiwoom',
+
+    // 개명 이력(공식 승계 관계, 같은 구단) — 과거 팀명도 현재 구단 컬러로 표시
+    '해태': 'kia',      // 해태 타이거즈 → 기아 타이거즈 (2001)
+    'MBC': 'lg',        // MBC 청룡 → LG 트윈스 (1990)
+    'OB': 'doosan',     // OB 베어스 → 두산 베어스 (1999)
+    '빙그레': 'hanwha', // 빙그레 이글스 → 한화 이글스 (1994)
+    'SK': 'ssg',        // SK 와이번스 → SSG 랜더스 (2021)
+    '넥센': 'kiwoom',   // 넥센 히어로즈 → 키움 히어로즈
+
+    // 해체되어 승계 구단이 없는 팀(삼미/청보/태평양/현대, 쌍방울)은 의도적으로 매핑하지 않음 — 기본색으로 표시
   };
   // 영어 키 → CSS 변수 참조
   const TEAM_COLOR = {
@@ -625,7 +634,7 @@
   el.btnKakao.addEventListener('click', copyResult);
   el.navPrev.addEventListener('click', () => {
     const idx = gameNo - 1 - 1; // gameNo(1-based) -> 현재 index, 그 전 index
-    if (idx < 0) { toast('첫 경기예요'); return; }
+    if (idx < minIdx) { toast('공개된 지난 경기가 아니에요'); return; }
     loadGame(idx);
   });
   el.navNext.addEventListener('click', () => {
@@ -656,8 +665,10 @@
   if (devReset) devReset.addEventListener('click', () => { localStorage.removeItem(storeKey(gameNo)); location.reload(); });
 
   // ── 시작 ──────────────────────────────
+  const MAX_VISIBLE = 5; // 오늘 포함 최대 접근 가능 경기 수
   let allGames = [];   // 전체 경기 목록 (data.games)
   let todayIdx = 0;    // 오늘 날짜에 해당하는 인덱스 (NEXT의 상한선)
+  let minIdx = 0;       // PREV로 갈 수 있는 최소 인덱스 (오늘 포함 MAX_VISIBLE개까지만)
 
   function loadGame(idx) {
     if (idx < 0 || idx >= allGames.length) return;
@@ -711,7 +722,7 @@
       `<span class="${awayCls}">${game.away_score} ${game.away_team}</span>`;
 
     // PREV/NEXT 버튼 활성/비활성 표시
-    el.navPrev.disabled = (idx <= 0);
+    el.navPrev.disabled = (idx <= minIdx);
     el.navNext.disabled = (idx >= todayIdx);
 
     // 이 경기의 저장된 진행상황 복원
@@ -754,6 +765,8 @@
     const idx = kstDayIndex();
     // 오늘이 아직 1번 경기 전이면 0으로, 목록을 넘어서면 마지막 경기로 고정
     todayIdx = Math.max(0, Math.min(idx, allGames.length - 1));
+    // 오늘 포함 최근 MAX_VISIBLE개까지만 PREV로 접근 가능
+    minIdx = Math.max(0, todayIdx - (MAX_VISIBLE - 1));
 
     if (idx < 0) {
       el.matchTheme.textContent = '오늘의 경기가 아직 준비되지 않았어요';

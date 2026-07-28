@@ -234,16 +234,37 @@
   // ── 설정 ──────────────────────────────────────
   const MAX_TRIES   = 8;
   const STORE_KEY   = 'wtb_whoareya';
-  const EPOCH       = Date.UTC(2026, 6, 28); // 2026-07-28 = #001
+  const EPOCH       = Date.UTC(2026, 6, 20); // 2026-07-28 = #001
   const SITE_URL    = 'whosthatbaseball.com';
   // 날짜순 정답 선수 번호 (순서대로, 계속 채워두기)
   const SCHEDULE = [
     401,   // #001
     447,   // #002
-    80,     // #003
+    80,    // #003
     120,   // #004
     88,    // #005
+    26,    // #006
+    31,    // #007
+    33,    // #008
+    92,    // #009
+    98,    // #010
+    107,   // #011
+    117,   // #012
+    146,   // #013
+    232,   // #014
+    254,   // #015
+    285,   // #016
+    437,   // #017
+    564,   // #018
+    610,   // #019
+    660,   // #020
+    698,   // #021
+    760,   // #022
+    764,   // #023
+    765,   // #024
+    919,   // #025
   ];
+  const MAX_VISIBLE = 5; // 오늘 포함 최대 접근 가능 회차 수
 
   const FIELDS = [
     { key: 'team',           cap: '구단',   type: 'match' },
@@ -261,6 +282,9 @@
   let guesses = [];     // { player, cells:[{state,text,arrow}] }
   let over    = false;
   let dayNo   = 1;
+  let curIdx  = 0;       // 현재 보고 있는 회차 인덱스
+  let todayIdx = 0;      // 오늘 날짜에 해당하는 인덱스 (NEXT의 상한선)
+  let minIdx   = 0;      // PREV로 갈 수 있는 최소 인덱스 (오늘 포함 MAX_VISIBLE개까지만)
   let acIdx   = -1;
   let acItems = [];
 
@@ -280,9 +304,6 @@
   // ── 날짜 (KST) ────────────────────────────────
   function kstNow() {
     return new Date(Date.now() + 9 * 3600 * 1000);
-  }
-  function kstDateStr() {
-    return kstNow().toISOString().slice(0, 10);
   }
   function kstDayIndex() {
     const d = kstNow();
@@ -541,11 +562,12 @@
     renderEntry();
   }
 
-  // ── 저장 ──────────────────────────────────────
+  // ── 저장 (회차마다 독립 저장 -> PREV/NEXT로 오가도 서로 안 섞임) ──
+  function storeKey(no) { return `${STORE_KEY}_${no}`; }
+
   function save(won) {
     try {
-      localStorage.setItem(STORE_KEY, JSON.stringify({
-        date: kstDateStr(),
+      localStorage.setItem(storeKey(dayNo), JSON.stringify({
         won,
         tries: guesses.length,
         ids: guesses.map(g => g.player.id),
@@ -553,14 +575,13 @@
     } catch (e) { /* 저장 실패는 무시 */ }
   }
 
-  function load() {
+  function load(no) {
     try {
-      const raw = localStorage.getItem(STORE_KEY);
+      const raw = localStorage.getItem(storeKey(no));
       if (!raw) return null;
-      const d = JSON.parse(raw);
-      return d && d.date === kstDateStr() ? d : null;
+      return JSON.parse(raw);
     } catch (e) {
-      try { localStorage.removeItem(STORE_KEY); } catch (_) {}
+      try { localStorage.removeItem(storeKey(no)); } catch (_) {}
       return null;
     }
   }
@@ -634,8 +655,14 @@
 
   el.navPrev = $('navPrev');
   el.navNext = $('navNext');
-  el.navPrev.addEventListener('click', () => toast('지난 회차는 준비 중이에요'));
-  el.navNext.addEventListener('click', () => toast('다음 회차는 내일 자정에 열려요'));
+  el.navPrev.addEventListener('click', () => {
+    if (curIdx - 1 < minIdx) { toast('공개된 지난 회차가 아니에요'); return; }
+    loadPuzzle(curIdx - 1);
+  });
+  el.navNext.addEventListener('click', () => {
+    if (curIdx + 1 > todayIdx) { toast('다음 회차는 아직 공개되지 않았어요'); return; }
+    loadPuzzle(curIdx + 1);
+  });
 
     // 상세 게임 방법 팝업
   const btnDetailHowto     = $('btnDetailHowto');
@@ -656,9 +683,63 @@
     if (e.key === 'Escape' && !detailHowtoOverlay.hidden) closeDetailHowto();
   });
 
-  // 개발용: 제목 클릭 초기화 (배포 전 삭제)
+  // 개발용: 제목 클릭 초기화 (배포 전 삭제) - 지금 보고 있는 회차의 저장값만 지움
   const devReset = $('devReset');
-  if (devReset) devReset.addEventListener('click', () => { localStorage.removeItem(STORE_KEY); location.reload(); });
+  if (devReset) devReset.addEventListener('click', () => { localStorage.removeItem(storeKey(dayNo)); location.reload(); });
+
+  // ── 회차 로드 ─────────────────────────────────
+  function loadPuzzle(idx) {
+    if (idx < 0 || idx >= SCHEDULE.length) return;
+
+    curIdx = idx;
+    dayNo = idx + 1;
+    guesses = [];
+    over = false;
+    acIdx = -1;
+    acItems = [];
+    closeAc();
+
+    // 화면 초기 상태로 리셋 (이전 회차가 종료 화면이었을 수 있으므로)
+    el.verdict.hidden = true;
+    el.share.hidden = true;
+    el.howto.hidden = false;
+    el.mysteryMark.classList.remove('is-solved');
+    el.mysteryMark.textContent = '?';
+    el.verdictHead.classList.remove('is-lose');
+    el.input.disabled = false;
+
+    const todayNum = SCHEDULE[idx];
+    const todayId = 'p' + String(todayNum).padStart(4, '0');
+    answer = players.find(p => p.id === todayId);
+
+    if (!answer) {
+      el.help.textContent = '이 회차의 문제가 아직 준비되지 않았어요.';
+      el.input.disabled = true;
+      return;
+    }
+
+    const no = `#${String(dayNo).padStart(3, '0')}`;
+    el.puzzleNo.textContent = no;
+    el.navNo.textContent = no;
+
+    // 이 회차를 이미 플레이했으면 복원
+    const saved = load(dayNo);
+    if (saved) {
+      saved.ids.forEach(id => {
+        const p = players.find(x => x.id === id);
+        if (p) guesses.push({ player: p, cells: judge(p) });
+      });
+      over = true;
+      renderEnd(saved.won);
+    }
+
+    renderLog();
+    renderMysteryHints();
+    renderEntry();
+
+    el.navPrev.disabled = (curIdx <= minIdx);
+    el.navNext.disabled = (curIdx >= todayIdx);
+  }
 
   // ── 시작 ──────────────────────────────────────
   async function init() {
@@ -681,36 +762,18 @@
     }
 
     const idx = kstDayIndex();
-    dayNo = idx + 1;
+    // 오늘이 아직 1회차 전이면 0으로, 목록을 넘어서면 마지막 회차로 고정
+    todayIdx = Math.max(0, Math.min(idx, SCHEDULE.length - 1));
+    // 오늘 포함 최근 MAX_VISIBLE개까지만 PREV로 접근 가능
+    minIdx = Math.max(0, todayIdx - (MAX_VISIBLE - 1));
 
-    const todayNum = SCHEDULE[idx];
-    const todayId = 'p' + String(todayNum).padStart(4, '0');
-    answer = players.find(p => p.id === todayId);
-
-    if (!answer) {
+    if (idx < 0) {
       el.help.textContent = '오늘의 문제가 아직 준비되지 않았어요.';
       el.input.disabled = true;
       return;
     }
 
-    const no = `#${String(dayNo).padStart(3, '0')}`;
-    el.puzzleNo.textContent = no;
-    el.navNo.textContent = no;
-
-    // 오늘 이미 플레이했으면 복원
-    const saved = load();
-    if (saved) {
-      saved.ids.forEach(id => {
-        const p = players.find(x => x.id === id);
-        if (p) guesses.push({ player: p, cells: judge(p) });
-      });
-      over = true;
-      renderEnd(saved.won);
-    }
-
-    renderLog();
-    renderMysteryHints();
-    renderEntry();
+    loadPuzzle(todayIdx);
   }
 
   init();
