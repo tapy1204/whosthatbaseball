@@ -219,7 +219,11 @@ html, body {
 .now-info .now-try  { font-size: 13px; color: var(--muted); margin-top: 2px; }
 
 /* ── 야구장 그라운드 ──────────────────── */
-.field-wrap { padding: 15px 12px; }
+.field-wrap {
+  padding: 15px 12px;
+  /* 필드 실제 폭(뷰포트 비율) 대비 원래 디자인 폭(456px)의 축소 비율 */
+  --icon-scale: min(1, calc((min(100vw, 480px) - 24px) / 456px));
+}
 .field {
   position: relative;
   width: 100%;
@@ -294,39 +298,40 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: calc(5px * var(--icon-scale));
   width: 7px;
 }
 .slot-jersey {
   position: relative;
-  width: 50px; height: 50px;
+  width: calc(55px * var(--icon-scale)); height: calc(55px * var(--icon-scale));
+  max-width: 55px; max-height: 55px;
   border-radius: 12px;
   background: var(--jersey);
   color: #fff;
   display: grid; place-items: center;
-  font-size: 22px; font-weight: 900;
+  font-size: calc(24px * var(--icon-scale)); font-weight: 900;
   box-shadow: 0 3px 8px rgba(0,0,0,.75);
 }
 .slot.is-solved  .slot-jersey { background: var(--wd-green); }
 .slot.is-failed  .slot-jersey { background: var(--jersey-dk); }
 .slot-order {
-  position: absolute; top: -8px; left: -8px;
-  width: 22px; height: 22px;
+  position: absolute; top: calc(-8px * var(--icon-scale)); left: calc(-8px * var(--icon-scale));
+  width: calc(22px * var(--icon-scale)); height: calc(22px * var(--icon-scale));
   border-radius: 50%;
   background: var(--order-badge);
   color: var(--accent-lt);
-  font-size: 12px; font-weight: 900;
+  font-size: calc(12px * var(--icon-scale)); font-weight: 900;
   display: grid; place-items: center;
   border: 1.5px solid var(--accent-lt);
 }
 /* 이름표 (진행중 미니 프리뷰 / 완료 이름) */
 .slot-name {
-  min-width: 54px;
+  min-width: calc(54px * var(--icon-scale));
   padding: 2px 9px;
   border-radius: 7px;
   background: rgba(20,20,30,.55);
   color: #fff;
-  font-size: 12.5px; font-weight: 800;
+  font-size: calc(12.5px * var(--icon-scale)); font-weight: 800;
   text-align: center;
   letter-spacing: -0.02em;
   white-space: nowrap;
@@ -350,41 +355,48 @@ html, body {
   padding: 4px 0;
 }
 .slot-empty i {
-  width: 8px; height: 3px; border-radius: 2px;
+  width: calc(8px * var(--icon-scale)); height: calc(3px * var(--icon-scale)); border-radius: 2px;
   background: rgba(255,255,255,.4);
 }
 /* 타점·도루 아이콘 */
 .slot-stat {
   position: absolute;
-  top: -8px;
-  left: 32px;
+  top: calc(-8px * var(--icon-scale));
+  left: calc(32px * var(--icon-scale));
   display: flex; align-items: center; gap: 3px;
   background: var(--order-badge);
   padding: 2px 7px 2px 5px;
   border-radius: 999px;
-  font-size: 11px; font-weight: 900;
+  font-size: calc(11px * var(--icon-scale)); font-weight: 900;
   color: var(--accent-lt);
   white-space: nowrap;
 }
 .slot-stat svg,
-.slot-stat img { width: 12px; height: 12px; object-fit: contain; }
+.slot-stat img { width: calc(12px * var(--icon-scale)); height: calc(12px * var(--icon-scale)); object-fit: contain; }
 
 /* ── 워들 입력 화면 ───────────────────── */
 .wordle { padding: 4px 16px 0; }
 .wd-grid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
   gap: 7px;
   justify-content: center;
   margin-bottom: 20px;
 }
-.wd-row { display: flex; gap: 7px; justify-content: center; }
+.wd-row { display: flex; gap: 7px; justify-content: center; width: 100%; }
 .wd-cell {
-  width: 46px; height: 52px;
+  container-type: inline-size;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 46px;
+  aspect-ratio: 46 / 52;
   border-radius: 9px;
   background: var(--wd-empty);
   border: 1.5px solid var(--line);
   display: grid; place-items: center;
-  font-size: 24px; font-weight: 800;
+  font-size: min(24px, 45cqi);
+  font-weight: 800;
   color: #fff;
 }
 .wd-cell.filled { border-color: #45456a; }
@@ -589,7 +601,7 @@ html, body {
 [hidden] { display: none !important; }
 
 @media (max-width: 380px) {
-  .wd-cell { width: 40px; height: 46px; font-size: 20px; }
+  .wd-cell { max-width: 40px; aspect-ratio: 40 / 46; font-size: min(20px, 45cqi); }
   .key { height: 46px; font-size: 16px; }
   .slot { width: 62px; }
 }
