@@ -459,7 +459,7 @@ html, body {
 .badge-pitcher { --bg-img: url('../image/position/투수3.png'); }
 .badge-infield { --bg-img: url('../image/position/내야.png'); }
 .badge-outfield { --bg-img: url('../image/position/외야.png'); }
-.badge-catcher { --bg-img: url('../image/position/포수.jpeg'); }
+.badge-catcher { --bg-img: url('../image/position/포수.png'); }
 
 /* 구단 로고 */
 .badge-lg { --bg-img: url('../image/team/lg.png'); }
