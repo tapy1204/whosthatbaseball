@@ -71,6 +71,9 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
   background: var(--bg);
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -80,10 +83,14 @@ html, body {
 .app {
   max-width: 480px;
   margin: 0 auto;
-  min-height: 100dvh;
+  height: 100dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
   display: flex;
   flex-direction: column;
   background: var(--bg);
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
 }
 
 /* ── 헤더 ─────────────────────────────── */
@@ -609,11 +616,20 @@ html, body {
 
 /* ── 하단 네비 ────────────────────────── */
 .nav {
-  margin-top: auto;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 15;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px 22px;
+  padding: 10px 20px calc(22px + env(safe-area-inset-bottom));
+  background: var(--hdr);
+  border-top: 1px solid rgba(255, 255, 255, .08);
 }
 .nav-btn {
   background: none;
