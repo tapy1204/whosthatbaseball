@@ -13,9 +13,15 @@
 
   <!-- 헤더 -->
   <header class="hdr">
-    <button class="hdr-btn" type="button" aria-label="메뉴"><span class="hamburger"></span></button>
+    <button class="hdr-btn" type="button" id="btnMenu" aria-label="메뉴" aria-expanded="false" aria-controls="menuOverlay"><span class="hamburger"></span></button>
     <h1 class="hdr-title" id="devReset" style="cursor:pointer">MISSING9</h1>
-    <button class="hdr-btn" type="button" aria-label="통계"><span class="stats-icon"><i></i><i></i><i></i></span></button>
+    <button class="hdr-btn" type="button" id="btnDetailHowto" aria-label="상세 게임 방법">
+      <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"></circle>
+        <line x1="12" y1="16" x2="12" y2="11"></line>
+        <line x1="12" y1="8" x2="12" y2="8"></line>
+      </svg>
+    </button>
   </header>
 
   <!-- 경기 정보 -->
@@ -100,7 +106,45 @@
     <div class="legend-row"><span class="legend-sq y"></span> 이름에 있지만 자리가 다름</div>
     <div class="legend-row"><span class="legend-sq x"></span> 이름에 없는 글자</div>
   </section>
-  
+
+  <!-- 상세 게임 방법 팝업 -->
+  <div class="modal-overlay" id="detailHowtoOverlay" hidden>
+    <div class="modal-box howto">
+      <h3 class="howto-title">상세 게임 방법</h3>
+
+      <p class="detail-label">게임 목표</p>
+      <p class="detail-text">매일 자정에 새로 출제되는 KBO 역사 속 한 경기를 골라, 그 경기 라인업 9명의 타자 이름을 모두 맞혀보세요. 하루에 한 번만 플레이할 수 있어요.</p>
+
+      <div class="howto-div"></div>
+
+      <p class="detail-label">추측 방법</p>
+      <p class="detail-text">야구장 위 선수 마커를 누르면 자모 워들 입력이 시작돼요. 자모 키보드로 이름을 입력하고 [입력]을 누르면, 자리마다 색으로 정답과의 일치 여부를 알려줘요. 한 타순당 최대 6번까지 시도할 수 있어요.</p>
+
+      <div class="howto-div"></div>
+
+      <p class="detail-label">색 판정</p>
+      <div class="legend-row"><span class="legend-sq g"></span> 자리·글자가 모두 <b>정확</b></div>
+      <div class="legend-row"><span class="legend-sq y"></span> 이름에 있지만 자리가 다름</div>
+      <div class="legend-row"><span class="legend-sq x"></span> 이름에 없는 글자</div>
+
+      <div class="howto-div"></div>
+
+      <p class="detail-label">마커 정보</p>
+      <ul class="detail-list">
+        <li><b>타순</b> · 유니폼 위 작은 숫자 배지가 그 선수의 타순이에요</li>
+        <li><b>타점 · 도루</b> · 이 경기에서 그 선수가 기록한 타점 · 도루 수가 표시돼요</li>
+        <li><b>진행 프리뷰</b> · 시도 중 확정(초록)된 글자는 마커 이름표에 미리 보여요</li>
+      </ul>
+
+      <div class="howto-div"></div>
+
+      <p class="detail-label">게임 종료</p>
+      <p class="detail-text">9명을 모두 맞히거나, 한 명이라도 6번의 기회를 다 쓰면 그 경기는 종료돼요. 못 맞힌 선수의 이름은 종료와 동시에 공개돼요. 결과는 스포일러 없이 카카오톡이나 링크로 공유할 수 있어요.</p>
+
+      <button class="modal-confirm" type="button" id="detailHowtoConfirm">확인</button>
+    </div>
+  </div>
+
 
   <!-- 하단 액션 (워들 화면) -->
   <div class="actions" id="actions" hidden>
@@ -115,6 +159,57 @@
     <button class="nav-btn" type="button" id="navNext">NEXT ►</button>
   </nav>
 
+</div>
+
+<!-- 메뉴 드로어 (게임 목록 + 진행현황) -->
+<div class="menu-overlay" id="menuOverlay">
+  <aside class="menu-drawer" id="menuDrawer" role="dialog" aria-label="게임 목록 및 진행현황">
+    <div class="menu-status">
+      <div class="menu-status-top">
+        <span class="menu-status-no" id="menuPuzzleNo">#001</span>
+        <span class="menu-status-label">오늘의 진행률 · <span id="menuProgress">0 / 4</span></span>
+      </div>
+      <div class="menu-progress-bar" id="menuProgressBar"></div>
+    </div>
+
+    <div class="menu-games">
+      <h3 class="menu-games-title">오늘의 게임</h3>
+
+      <a class="menu-game-card is-current" href="missing9.html">
+        <span class="menu-game-icon">?</span>
+        <span class="menu-game-info">
+          <span class="menu-game-name">MISSING9</span>
+          <span class="menu-game-desc">역사에 남은 그 경기, 9명의 타자를 찾아보세요.</span>
+        </span>
+      </a>
+
+      <a class="menu-game-card" href="/whoareya/public/games/whoareya.html">
+        <span class="menu-game-icon">?</span>
+        <span class="menu-game-info">
+          <span class="menu-game-name">Who Are Ya?</span>
+          <span class="menu-game-desc">6가지 속성을 비교하며 오늘의 선수를 맞혀보세요.</span>
+        </span>
+      </a>
+
+      <div class="menu-game-card is-disabled">
+        <span class="menu-game-icon">?</span>
+        <span class="menu-game-info">
+          <span class="menu-game-name">Baseball Bingo</span>
+          <span class="menu-game-badge">개발중</span>
+        </span>
+      </div>
+
+      <div class="menu-game-card is-disabled">
+        <span class="menu-game-icon">?</span>
+        <span class="menu-game-info">
+          <span class="menu-game-name">Line UP</span>
+          <span class="menu-game-badge">개발중</span>
+        </span>
+      </div>
+    </div>
+
+    <a class="menu-home-link" href="/index.html">← 홈으로</a>
+  </aside>
 </div>
 
 <div class="toast" id="toast" role="status"></div>
@@ -663,6 +758,75 @@
   // 개발용: 제목 클릭 초기화 (배포 전 삭제) - 지금 보고 있는 경기의 저장값만 지움
   const devReset = $('devReset');
   if (devReset) devReset.addEventListener('click', () => { localStorage.removeItem(storeKey(gameNo)); location.reload(); });
+
+  // 상세 게임 방법 팝업
+  const btnDetailHowto     = $('btnDetailHowto');
+  const detailHowtoOverlay = $('detailHowtoOverlay');
+  const detailHowtoConfirm = $('detailHowtoConfirm');
+
+  function openDetailHowto()  { detailHowtoOverlay.hidden = false; }
+  function closeDetailHowto() { detailHowtoOverlay.hidden = true; }
+
+  btnDetailHowto.addEventListener('click', openDetailHowto);
+  detailHowtoConfirm.addEventListener('click', closeDetailHowto);
+
+  detailHowtoOverlay.addEventListener('click', (e) => {
+    if (e.target === detailHowtoOverlay) closeDetailHowto(); // 바깥 클릭 시 닫기
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !detailHowtoOverlay.hidden) closeDetailHowto();
+  });
+
+  // 메뉴 드로어 (게임 목록 + 진행현황)
+  const btnMenu         = $('btnMenu');
+  const menuOverlay      = $('menuOverlay');
+  const menuProgress     = $('menuProgress');
+  const menuProgressBar  = $('menuProgressBar');
+  const menuPuzzleNo     = $('menuPuzzleNo');
+  const TOTAL_GAMES = 4; // 홈 화면 게임 슬롯 총 개수 (누구 야? / MISSING9 / Bingo / Line UP)
+
+  function isWhoareyaDoneToday() {
+    try {
+      const EPOCH_WY = Date.UTC(2026, 6, 20); // whoareya.html과 동일한 기준일
+      const utcMidnight = Date.UTC(kstNow().getUTCFullYear(), kstNow().getUTCMonth(), kstNow().getUTCDate());
+      const idx = Math.floor((utcMidnight - EPOCH_WY) / 86400000);
+      if (idx < 0) return false;
+      return !!localStorage.getItem(`wtb_whoareya_${idx + 1}`);
+    } catch (e) { return false; }
+  }
+
+  function renderMenuStatus() {
+    menuPuzzleNo.textContent = el.matchNo.textContent;
+    let done = 0;
+    if (over) done += 1;                  // MISSING9 완료 여부
+    if (isWhoareyaDoneToday()) done += 1;  // Who Are Ya? 완료 여부
+    menuProgress.textContent = `${done} / ${TOTAL_GAMES}`;
+    menuProgressBar.innerHTML = '';
+    for (let i = 0; i < TOTAL_GAMES; i++) {
+      const seg = document.createElement('div');
+      seg.className = 'menu-progress-seg' + (i < done ? ' filled' : '');
+      menuProgressBar.appendChild(seg);
+    }
+  }
+
+  function openMenu() {
+    renderMenuStatus();
+    menuOverlay.classList.add('is-open');
+    btnMenu.setAttribute('aria-expanded', 'true');
+  }
+  function closeMenu() {
+    menuOverlay.classList.remove('is-open');
+    btnMenu.setAttribute('aria-expanded', 'false');
+  }
+
+  btnMenu.addEventListener('click', openMenu);
+  menuOverlay.addEventListener('click', (e) => {
+    if (e.target === menuOverlay) closeMenu(); // 바깥 클릭 시 닫기
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuOverlay.classList.contains('is-open')) closeMenu();
+  });
 
   // ── 시작 ──────────────────────────────
   const MAX_VISIBLE = 5; // 오늘 포함 최대 접근 가능 경기 수

@@ -13,7 +13,7 @@
 
   <!-- 헤더 -->
   <header class="hdr">
-    <button class="hdr-btn" type="button" aria-label="메뉴">
+    <button class="hdr-btn" type="button" id="btnMenu" aria-label="메뉴" aria-expanded="false" aria-controls="menuOverlay">
       <span class="hamburger"></span>
     </button>
     <h1 class="hdr-title" id="devReset" style="cursor:pointer">Who Are Ya?</h1>
@@ -223,6 +223,57 @@
     <button class="nav-btn" type="button" id="navNext">NEXT ►</button>
   </nav>
 
+</div>
+
+<!-- 메뉴 드로어 (게임 목록 + 진행현황) -->
+<div class="menu-overlay" id="menuOverlay">
+  <aside class="menu-drawer" id="menuDrawer" role="dialog" aria-label="게임 목록 및 진행현황">
+    <div class="menu-status">
+      <div class="menu-status-top">
+        <span class="menu-status-no" id="menuPuzzleNo">#001</span>
+        <span class="menu-status-label">오늘의 진행률 · <span id="menuProgress">0 / 4</span></span>
+      </div>
+      <div class="menu-progress-bar" id="menuProgressBar"></div>
+    </div>
+
+    <div class="menu-games">
+      <h3 class="menu-games-title">오늘의 게임</h3>
+
+      <a class="menu-game-card is-current" href="whoareya.html">
+        <span class="menu-game-icon">?</span>
+        <span class="menu-game-info">
+          <span class="menu-game-name">Who Are Ya?</span>
+          <span class="menu-game-desc">6가지 속성을 비교하며 오늘의 선수를 맞혀보세요.</span>
+        </span>
+      </a>
+
+      <a class="menu-game-card" href="/missing9/public/games/missing9.html">
+        <span class="menu-game-icon">?</span>
+        <span class="menu-game-info">
+          <span class="menu-game-name">MISSING9</span>
+          <span class="menu-game-desc">역사에 남은 그 경기, 9명의 타자를 찾아보세요.</span>
+        </span>
+      </a>
+
+      <div class="menu-game-card is-disabled">
+        <span class="menu-game-icon">?</span>
+        <span class="menu-game-info">
+          <span class="menu-game-name">Baseball Bingo</span>
+          <span class="menu-game-badge">개발중</span>
+        </span>
+      </div>
+
+      <div class="menu-game-card is-disabled">
+        <span class="menu-game-icon">?</span>
+        <span class="menu-game-info">
+          <span class="menu-game-name">Line UP</span>
+          <span class="menu-game-badge">개발중</span>
+        </span>
+      </div>
+    </div>
+
+    <a class="menu-home-link" href="/index.html">← 홈으로</a>
+  </aside>
 </div>
 
 <!-- 토스트 -->
@@ -683,6 +734,57 @@
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !detailHowtoOverlay.hidden) closeDetailHowto();
+  });
+
+  // 메뉴 드로어 (게임 목록 + 진행현황)
+  const btnMenu      = $('btnMenu');
+  const menuOverlay  = $('menuOverlay');
+  const menuProgress = $('menuProgress');
+  const menuProgressBar = $('menuProgressBar');
+  const menuPuzzleNo = $('menuPuzzleNo');
+
+  const TOTAL_GAMES = 4; // 홈 화면 게임 슬롯 총 개수 (누구 야? / MISSING9 / Bingo / Line UP)
+
+  function isMissing9DoneToday() {
+    try {
+      const EPOCH_M9 = Date.UTC(2026, 6, 17); // missing9.html과 동일한 기준일
+      const utcMidnight = Date.UTC(kstNow().getUTCFullYear(), kstNow().getUTCMonth(), kstNow().getUTCDate());
+      const idx = Math.floor((utcMidnight - EPOCH_M9) / 86400000);
+      if (idx < 0) return false;
+      return !!localStorage.getItem(`wtb_missing9_${idx + 1}`);
+    } catch (e) { return false; }
+  }
+
+  function renderMenuStatus() {
+    menuPuzzleNo.textContent = el.puzzleNo.textContent;
+    let done = 0;
+    if (over) done += 1;                   // 누구 야? 완료 여부
+    if (isMissing9DoneToday()) done += 1;   // MISSING9 완료 여부
+    menuProgress.textContent = `${done} / ${TOTAL_GAMES}`;
+    menuProgressBar.innerHTML = '';
+    for (let i = 0; i < TOTAL_GAMES; i++) {
+      const seg = document.createElement('div');
+      seg.className = 'menu-progress-seg' + (i < done ? ' filled' : '');
+      menuProgressBar.appendChild(seg);
+    }
+  }
+
+  function openMenu() {
+    renderMenuStatus();
+    menuOverlay.classList.add('is-open');
+    btnMenu.setAttribute('aria-expanded', 'true');
+  }
+  function closeMenu() {
+    menuOverlay.classList.remove('is-open');
+    btnMenu.setAttribute('aria-expanded', 'false');
+  }
+
+  btnMenu.addEventListener('click', openMenu);
+  menuOverlay.addEventListener('click', (e) => {
+    if (e.target === menuOverlay) closeMenu(); // 바깥 클릭 시 닫기
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuOverlay.classList.contains('is-open')) closeMenu();
   });
 
   // 개발용: 제목 클릭 초기화 (배포 전 삭제) - 지금 보고 있는 회차의 저장값만 지움

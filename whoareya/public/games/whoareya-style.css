@@ -490,6 +490,128 @@ html, body {
   animation: badgePop 1.40s ease forwards;
 }
 
+/* ── 메뉴 드로어 (게임 목록 + 진행현황) ── */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .55);
+  z-index: 90;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+.menu-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu-drawer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 66.6667%;
+  max-width: 320px;
+  background: rgba(30, 30, 56, .94);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 24px 18px calc(24px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform .28s ease;
+  box-shadow: 8px 0 24px rgba(0, 0, 0, .35);
+}
+.menu-overlay.is-open .menu-drawer {
+  transform: translateX(0);
+}
+
+.menu-status {
+  background: rgba(255, 255, 255, .07);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  flex: none;
+}
+.menu-status-top {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+.menu-status-no { font-size: 12px; font-weight: 700; color: #8a8ab0; }
+.menu-status-label { font-size: 13px; font-weight: 700; color: #fff; }
+.menu-progress-bar { display: flex; gap: 5px; }
+.menu-progress-seg {
+  flex: 1;
+  height: 8px;
+  border-radius: 6px;
+  background: #3a3a58;
+}
+.menu-progress-seg.filled { background: var(--hit); }
+
+.menu-games-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8a8ab0;
+  letter-spacing: .02em;
+  margin-bottom: 10px;
+}
+.menu-game-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, .05);
+  text-decoration: none;
+  color: #fff;
+  margin-bottom: 8px;
+  transition: background .15s;
+}
+.menu-game-card:hover { background: rgba(255, 255, 255, .1); }
+.menu-game-card.is-current { border: 1px solid rgba(255, 255, 255, .3); }
+.menu-game-card.is-disabled { opacity: .5; cursor: default; }
+.menu-game-card.is-disabled:hover { background: rgba(255, 255, 255, .05); }
+.menu-game-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #33334f;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  font-weight: 900;
+  color: #8a8ab0;
+  flex: none;
+}
+.menu-game-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.menu-game-name { font-size: 14px; font-weight: 800; }
+.menu-game-desc { font-size: 11px; color: #a6a6c0; line-height: 1.4; }
+.menu-game-badge {
+  align-self: flex-start;
+  font-size: 10px;
+  font-weight: 700;
+  color: #a6a6c0;
+  background: rgba(255, 255, 255, .08);
+  border-radius: 999px;
+  padding: 2px 8px;
+  margin-top: 2px;
+}
+
+.menu-home-link {
+  margin-top: auto;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #c8c8dc;
+  text-decoration: none;
+  padding: 10px;
+  flex: none;
+}
+.menu-home-link:hover { color: #fff; }
+
 /* ── 상세 게임 방법 팝업 ──────────────── */
 .modal-overlay {
   position: fixed;
