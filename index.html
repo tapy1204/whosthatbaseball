@@ -20,22 +20,17 @@
         <span class="no-label">NO.</span>
         <span class="no-number">001</span>
       </div>
-      <div class="status-card-progress-label">오늘의 진행률 · 2 / 4</div>
+      <div class="status-card-progress-label" id="statusProgressLabel">오늘의 진행률 · 0 / 4</div>
     </div>
 
-    <div class="progress-bar">
-      <div class="progress-segment filled"></div>
-      <div class="progress-segment filled"></div>
-      <div class="progress-segment"></div>
-      <div class="progress-segment"></div>
-    </div>
+    <div class="progress-bar" id="statusProgressBar"></div>
 
     <div class="status-card-bottom">
       <div class="status-legend">
-        <span class="legend-item"><span class="dot dot-done"></span>완료 2</span>
-        <span class="legend-item"><span class="dot dot-remain"></span>남음 2</span>
+        <span class="legend-item"><span class="dot dot-done"></span><span id="statusDoneCount">완료 0</span></span>
+        <span class="legend-item"><span class="dot dot-remain"></span><span id="statusRemainCount">남음 4</span></span>
       </div>
-      <button class="continue-btn" disabled>이어서 풀기 →</button>
+      <button class="continue-btn" id="continueBtn" type="button">이어서 풀기 →</button>
     </div>
   </div>
 
@@ -50,7 +45,7 @@
           <div class="game-icon">
             ?
           </div>
-          <button class="play-badge" onclick="location.href='/whoareya/public/games/whoareya.html'">게임하기 →</button>
+          <div class="play-badges" id="playBadges-whoareya"></div>
         </div>
         <div>
           <div class="game-title">누구 야?</div>
@@ -63,7 +58,7 @@
           <div class="game-icon">
             ?
           </div>
-          <button class="play-badge" onclick="location.href='/missing9/public/games/missing9.html'">게임하기 →</button>
+          <div class="play-badges" id="playBadges-missing9"></div>
         </div>
         <div>
           <div class="game-title">MISSING9</div>
@@ -97,6 +92,11 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="about-section">
+    <h2 class="about-title">About</h2>
+    <p class="about-desc">Who's That Baseball은 KBO 팬을 위한 데일리 야구 퀴즈 플랫폼입니다. 선수의 속성을 비교해 오늘의 선수를 맞히고, 특징적인 경기의 라인업을 추리하고, 조건에 맞는 선수를 찾아가며 매일 야구 지식을 시험해보세요. 매일 자정 새로운 문제가 공개되며, 결과는 친구들과 공유할 수 있습니다.</p>
   </div>
   </section>
 
@@ -152,9 +152,78 @@
     const dayLabels = ['일', '월', '화', '수', '목', '금', '토']; // Date.getDay() 인덱스 순서
     const calendarEl = document.getElementById('calendar');
 
+    const REVEAL_DAYS = 5; // 게임이 오늘 포함 최대 5일치까지 공개됨 (whoareya/missing9의 MAX_VISIBLE과 동일)
+    const GAMES = [
+      { key: 'whoareya', url: '/whoareya/public/games/whoareya.html' },
+      { key: 'missing9', url: '/missing9/public/games/missing9.html' },
+    ];
+
     const today = new Date();
     const todayStr = today.toDateString();
     let selectedDateStr = todayStr; // 처음 진입 시 오늘 날짜가 기본 선택
+    let selectedOffset = 0;         // 오늘로부터 며칠 전인지 (0 = 오늘)
+
+    // ── 상태 카드 (진행률) ─────────────────────
+    const TOTAL_GAMES = 4; // 게임 슬롯 총 개수 (누구 야? / MISSING9 / Bingo / Line UP)
+    const WHOAREYA_EPOCH = Date.UTC(2026, 6, 20); // whoareya.html과 동일한 기준일
+    const MISSING9_EPOCH = Date.UTC(2026, 6, 17); // missing9.html과 동일한 기준일
+
+    function localDayIdx(epochUTCms) {
+      const utcMidnight = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+      return Math.floor((utcMidnight - epochUTCms) / 86400000);
+    }
+    const whoareyaTodayIdx = localDayIdx(WHOAREYA_EPOCH);
+    const missing9TodayIdx = localDayIdx(MISSING9_EPOCH);
+
+    function isWhoareyaCompleted(dayNo) {
+      if (dayNo < 1) return false;
+      try {
+        const raw = localStorage.getItem(`wtb_whoareya_${dayNo}`);
+        if (!raw) return false;
+        return !!JSON.parse(raw).over; // whoareya는 시도마다 저장되므로 종료 여부(over)를 직접 확인
+      } catch (e) { return false; }
+    }
+    function isMissing9Completed(dayNo) {
+      if (dayNo < 1) return false;
+      try {
+        const raw = localStorage.getItem(`wtb_missing9_${dayNo}`);
+        if (!raw) return false;
+        const lineup = JSON.parse(raw).lineup || []; // missing9는 시도마다 저장되므로 전원 종료 여부를 직접 확인
+        return lineup.length > 0 && lineup.every(s => s.status === 'solved' || s.status === 'failed');
+      } catch (e) { return false; }
+    }
+
+    const statusProgressLabel = document.getElementById('statusProgressLabel');
+    const statusProgressBar   = document.getElementById('statusProgressBar');
+    const statusDoneCount     = document.getElementById('statusDoneCount');
+    const statusRemainCount   = document.getElementById('statusRemainCount');
+
+    function renderProgressCard() {
+      // 공개 범위(오늘 포함 5일) 밖의 날짜는 그날 진행률을 알 수 없으므로 오늘 진행률로 대체
+      const useOffset = selectedOffset <= REVEAL_DAYS - 1 ? selectedOffset : 0;
+
+      const done =
+        (isWhoareyaCompleted(whoareyaTodayIdx - useOffset + 1) ? 1 : 0) +
+        (isMissing9Completed(missing9TodayIdx - useOffset + 1) ? 1 : 0);
+
+      let label = '오늘의 진행률';
+      if (useOffset > 0) {
+        const d = new Date(today);
+        d.setDate(today.getDate() - useOffset);
+        label = `${d.getMonth() + 1}/${d.getDate()}의 진행률`;
+      }
+
+      statusProgressLabel.textContent = `${label} · ${done} / ${TOTAL_GAMES}`;
+      statusDoneCount.textContent = `완료 ${done}`;
+      statusRemainCount.textContent = `남음 ${TOTAL_GAMES - done}`;
+
+      statusProgressBar.innerHTML = '';
+      for (let i = 0; i < TOTAL_GAMES; i++) {
+        const seg = document.createElement('div');
+        seg.className = 'progress-segment' + (i < done ? ' filled' : '');
+        statusProgressBar.appendChild(seg);
+      }
+    }
 
     function renderCalendar() {
       calendarEl.innerHTML = '';
@@ -173,13 +242,74 @@
         `;
         dayEl.addEventListener('click', () => {
           selectedDateStr = dateStr;
+          selectedOffset = i;
           renderCalendar();
+          renderGameButtons();
+          renderProgressCard();
         });
         calendarEl.appendChild(dayEl);
       }
     }
 
+    // 오늘 게임 버튼 + (공개된 날짜라면) 클릭한 날짜 게임 버튼
+    function renderGameButtons() {
+      const isRevealed = selectedOffset > 0 && selectedOffset <= REVEAL_DAYS - 1;
+      const d = new Date(today);
+      d.setDate(today.getDate() - selectedOffset);
+      const dateLabel = `${d.getMonth() + 1}/${d.getDate()}`;
+
+      GAMES.forEach(g => {
+        const box = document.getElementById(`playBadges-${g.key}`);
+        if (!box) return;
+        box.innerHTML = '';
+
+        const todayBtn = document.createElement('button');
+        todayBtn.className = 'play-badge';
+        todayBtn.type = 'button';
+        todayBtn.textContent = '오늘의 게임 →';
+        todayBtn.addEventListener('click', () => { location.href = g.url; });
+        box.appendChild(todayBtn);
+
+        if (isRevealed) {
+          const dateBtn = document.createElement('button');
+          dateBtn.className = 'play-badge secondary';
+          dateBtn.type = 'button';
+          dateBtn.textContent = `${dateLabel} 게임 →`;
+          dateBtn.addEventListener('click', () => { location.href = `${g.url}?day=${selectedOffset}`; });
+          box.appendChild(dateBtn);
+        }
+      });
+    }
+
+    // ── 이어서 풀기 ─────────────────────────
+    // 뒤로가기(bfcache 복원)로 돌아오면 페이지 스크립트가 다시 실행되지 않을 수 있으므로,
+    // 미리 계산해두지 않고 버튼을 누르는 그 순간에 localStorage를 읽는다.
+    const LAST_PLAYED_KEY = 'wtb_last_played'; // 각 게임 페이지가 오늘 회차를 열 때마다 { game, ts } 저장
+    const GAME_URL_BY_KEY = Object.fromEntries(GAMES.map(g => [g.key, g.url]));
+    const continueBtn = document.getElementById('continueBtn');
+
+    continueBtn.addEventListener('click', () => {
+      let url = GAME_URL_BY_KEY.whoareya; // 기본값: 오늘 플레이한 게임이 없으면 Who Are Ya?
+      try {
+        const raw = localStorage.getItem(LAST_PLAYED_KEY);
+        if (raw) {
+          const { game, ts } = JSON.parse(raw);
+          if (GAME_URL_BY_KEY[game] && new Date(ts).toDateString() === new Date().toDateString()) {
+            url = GAME_URL_BY_KEY[game];
+          }
+        }
+      } catch (e) { /* localStorage 접근 실패 시 기본값 사용 */ }
+      location.href = url;
+    });
+
     renderCalendar();
+    renderGameButtons();
+    renderProgressCard();
+
+    // 뒤로가기(bfcache 복원) 시 진행률 카드도 최신 상태로 다시 그림
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted) renderProgressCard();
+    });
   </script>
 </body>
 </html>

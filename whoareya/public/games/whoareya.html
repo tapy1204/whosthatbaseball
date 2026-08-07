@@ -607,8 +607,9 @@
     if (done) {
       over = true;
       renderEnd(won);
-      save(won);
     }
+
+    save(done, won); // 끝났든 아니든 매 시도마다 저장 -> 홈에 갔다 와도 진행 중이던 추측이 유지됨
 
     renderLog();
     renderMysteryHints();
@@ -618,11 +619,11 @@
   // ── 저장 (회차마다 독립 저장 -> PREV/NEXT로 오가도 서로 안 섞임) ──
   function storeKey(no) { return `${STORE_KEY}_${no}`; }
 
-  function save(won) {
+  function save(over_, won_) {
     try {
       localStorage.setItem(storeKey(dayNo), JSON.stringify({
-        won,
-        tries: guesses.length,
+        over: over_,
+        won: won_,
         ids: guesses.map(g => g.player.id),
       }));
     } catch (e) { /* 저장 실패는 무시 */ }
@@ -751,7 +752,11 @@
       const utcMidnight = Date.UTC(kstNow().getUTCFullYear(), kstNow().getUTCMonth(), kstNow().getUTCDate());
       const idx = Math.floor((utcMidnight - EPOCH_M9) / 86400000);
       if (idx < 0) return false;
-      return !!localStorage.getItem(`wtb_missing9_${idx + 1}`);
+      const raw = localStorage.getItem(`wtb_missing9_${idx + 1}`);
+      if (!raw) return false;
+      // missing9는 시도마다 저장되므로, 단순 존재 여부가 아니라 9명 전원 종료(정답/실패) 여부를 확인
+      const lineup = JSON.parse(raw).lineup || [];
+      return lineup.length > 0 && lineup.every(s => s.status === 'solved' || s.status === 'failed');
     } catch (e) { return false; }
   }
 
@@ -792,8 +797,16 @@
   if (devReset) devReset.addEventListener('click', () => { localStorage.removeItem(storeKey(dayNo)); location.reload(); });
 
   // ── 회차 로드 ─────────────────────────────────
+  // 홈 화면 '이어서 풀기' 버튼이 참조하는 마지막 플레이 게임 기록 (오늘 회차를 열 때만 기록)
+  function markLastPlayed() {
+    try {
+      localStorage.setItem('wtb_last_played', JSON.stringify({ game: 'whoareya', ts: Date.now() }));
+    } catch (e) { /* 저장 실패는 무시 */ }
+  }
+
   function loadPuzzle(idx) {
     if (idx < 0 || idx >= SCHEDULE.length) return;
+    if (idx === todayIdx) markLastPlayed();
 
     curIdx = idx;
     dayNo = idx + 1;
@@ -826,15 +839,17 @@
     el.puzzleNo.textContent = no;
     el.navNo.textContent = no;
 
-    // 이 회차를 이미 플레이했으면 복원
+    // 이 회차를 이미 플레이했으면 복원 (끝났든 진행 중이든)
     const saved = load(dayNo);
     if (saved) {
       saved.ids.forEach(id => {
         const p = players.find(x => x.id === id);
         if (p) guesses.push({ player: p, cells: judge(p) });
       });
-      over = true;
-      renderEnd(saved.won);
+      if (saved.over) {
+        over = true;
+        renderEnd(saved.won);
+      }
     }
 
     renderLog();
@@ -877,7 +892,15 @@
       return;
     }
 
-    loadPuzzle(todayIdx);
+    // 홈 화면 캘린더에서 특정 날짜로 진입한 경우 (?day=오늘로부터 며칠 전)
+    let startIdx = todayIdx;
+    const dayParam = parseInt(new URLSearchParams(location.search).get('day'), 10);
+    if (Number.isInteger(dayParam) && dayParam > 0) {
+      const wanted = todayIdx - dayParam;
+      if (wanted >= minIdx && wanted <= todayIdx) startIdx = wanted;
+    }
+
+    loadPuzzle(startIdx);
   }
 
   init();
