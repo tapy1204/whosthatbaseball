@@ -48,7 +48,7 @@
           <div class="play-badges" id="playBadges-whoareya"></div>
         </div>
         <div>
-          <div class="game-title">누구 야?</div>
+          <div class="game-title">Who Are Ya?</div>
           <div class="game-desc">6가지 속성을 비교하며 오늘의 선수를 맞혀보세요.</div>
         </div>
       </div>
@@ -104,11 +104,11 @@
   <div class="rule-card">
     <div class="rule-title-chip c1">
       <span class="rule-icon">?</span>
-      <span class="rule-name">누구 야?</span>
+      <span class="rule-name">Who Are Ya?</span>
     </div>
     <div class="rule-image-box"></div>
     <div class="rule-howto-label">게임하는 방법</div>
-    <div class="rule-desc">???</div>
+    <div class="rule-desc">매일 자정 새로운 KBO 선수가 출제돼요. 선수 이름을 입력하면 구단·포지션·투타·지명 구단·고교 권역·출생연도까지 6가지 속성을 정답과 비교해서 알려드려요. 초록이면 일치, 화살표는 정답의 출생연도가 더 높은지 낮은지를 알려주니 힌트를 좁혀가며 8번 안에 정답을 맞혀보세요.</div>
   </div>
   </section>
 
@@ -120,7 +120,7 @@
     </div>
     <div class="rule-image-box"></div>
     <div class="rule-howto-label">게임하는 방법</div>
-    <div class="rule-desc">???</div>
+    <div class="rule-desc">매일 자정 KBO 역사 속 한 경기가 출제돼요. 야구장 위 선수 마커를 눌러 자모 워들로 이름을 입력하면, 초록은 자리와 글자가 모두 일치, 노랑은 이름에 있지만 자리가 다름, 회색은 이름에 없는 글자를 뜻해요. 한 타순당 6번의 기회 안에 9명의 타자 이름을 모두 맞혀보세요.</div>
   </div>
   </section>
 
@@ -132,7 +132,7 @@
     </div>
     <div class="rule-image-box"></div>
     <div class="rule-howto-label">게임하는 방법</div>
-    <div class="rule-desc">???</div>
+    <div class="rule-desc">아직 개발 중인 게임이에요. 출시되면 게임 방법이 여기에 공개될 예정이에요.</div>
   </div>
   </section>
 
@@ -144,7 +144,7 @@
     </div>
     <div class="rule-image-box"></div>
     <div class="rule-howto-label">게임하는 방법</div>
-    <div class="rule-desc">???</div>
+    <div class="rule-desc">아직 개발 중인 게임이에요. 출시되면 게임 방법이 여기에 공개될 예정이에요.</div>
   </div>
   </section>
 
@@ -164,7 +164,7 @@
     let selectedOffset = 0;         // 오늘로부터 며칠 전인지 (0 = 오늘)
 
     // ── 상태 카드 (진행률) ─────────────────────
-    const TOTAL_GAMES = 4; // 게임 슬롯 총 개수 (누구 야? / MISSING9 / Bingo / Line UP)
+    const TOTAL_GAMES = 4; // 게임 슬롯 총 개수 (Who Are Ya? / MISSING9 / Bingo / Line UP)
     const WHOAREYA_EPOCH = Date.UTC(2026, 6, 20); // whoareya.html과 동일한 기준일
     const MISSING9_EPOCH = Date.UTC(2026, 6, 17); // missing9.html과 동일한 기준일
 
@@ -288,17 +288,53 @@
     const GAME_URL_BY_KEY = Object.fromEntries(GAMES.map(g => [g.key, g.url]));
     const continueBtn = document.getElementById('continueBtn');
 
-    continueBtn.addEventListener('click', () => {
-      let url = GAME_URL_BY_KEY.whoareya; // 기본값: 오늘 플레이한 게임이 없으면 Who Are Ya?
+    function isWhoareyaInProgress(dayNo) {
+      if (dayNo < 1) return false;
       try {
-        const raw = localStorage.getItem(LAST_PLAYED_KEY);
-        if (raw) {
-          const { game, ts } = JSON.parse(raw);
-          if (GAME_URL_BY_KEY[game] && new Date(ts).toDateString() === new Date().toDateString()) {
-            url = GAME_URL_BY_KEY[game];
+        const raw = localStorage.getItem(`wtb_whoareya_${dayNo}`);
+        if (!raw) return false;
+        const saved = JSON.parse(raw);
+        return Array.isArray(saved.ids) && saved.ids.length > 0 && !saved.over;
+      } catch (e) { return false; }
+    }
+    function isMissing9InProgress(dayNo) {
+      if (dayNo < 1) return false;
+      try {
+        const raw = localStorage.getItem(`wtb_missing9_${dayNo}`);
+        if (!raw) return false;
+        const lineup = JSON.parse(raw).lineup || [];
+        const started = lineup.some(s => s.status !== 'idle');
+        const done = lineup.length > 0 && lineup.every(s => s.status === 'solved' || s.status === 'failed');
+        return started && !done;
+      } catch (e) { return false; }
+    }
+
+    continueBtn.addEventListener('click', () => {
+      const useOffset = selectedOffset > 0 && selectedOffset <= REVEAL_DAYS - 1 ? selectedOffset : 0;
+      const wyDayNo = whoareyaTodayIdx - useOffset + 1;
+      const m9DayNo = missing9TodayIdx - useOffset + 1;
+
+      // 선택된 날짜에 진행 중(미완료)인 게임을 우선으로 찾는다 -> 엉뚱한 게임으로 가는 것 방지
+      let game = null;
+      if (isWhoareyaInProgress(wyDayNo)) game = 'whoareya';
+      else if (isMissing9InProgress(m9DayNo)) game = 'missing9';
+
+      // 진행 중인 게임이 없으면(오늘 한정) 가장 최근에 플레이한 게임으로 폴백
+      if (!game && useOffset === 0) {
+        try {
+          const raw = localStorage.getItem(LAST_PLAYED_KEY);
+          if (raw) {
+            const { game: g, ts } = JSON.parse(raw);
+            if (GAME_URL_BY_KEY[g] && new Date(ts).toDateString() === new Date().toDateString()) {
+              game = g;
+            }
           }
-        }
-      } catch (e) { /* localStorage 접근 실패 시 기본값 사용 */ }
+        } catch (e) { /* localStorage 접근 실패 시 기본값 사용 */ }
+      }
+
+      let url = GAME_URL_BY_KEY[game] || GAME_URL_BY_KEY.whoareya; // 최종 기본값: Who Are Ya?
+      if (useOffset > 0) url += `?day=${useOffset}`;
+
       location.href = url;
     });
 

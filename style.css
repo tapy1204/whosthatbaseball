@@ -1,396 +1,434 @@
-  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;700;900&display=swap');
 
-  html {
-    scroll-snap-type: y mandatory;
-  }
+:root {
+  /* 게임 카드 4종 공통 액센트 컬러 (홈 카드 + 룰 페이지 칩에서 함께 사용) */
+  --game-c1: #ef5b45; /* 누구 야? / Who Are Ya? */
+  --game-c2: #3b5bfa; /* MISSING9 */
+  --game-c3: #f2a33c; /* Baseball Bingo */
+  --game-c4: #3fb56c; /* Line UP */
+}
 
-  body {
-    margin: 0 auto;
-    max-width: 480px;
-    box-sizing: border-box;
-    padding: 10px;
-    background-color: rgb(30, 30, 33);
-    color: #ffffff;
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
-  }
+/* ============================================
+   기본 / 레이아웃
+   ============================================ */
+html {
+  scroll-snap-type: y proximity;
+  overscroll-behavior-y: none;
+}
 
-  .snap-section {
-    min-height: 100vh;
-    box-sizing: border-box;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-  }
+body {
+  margin: 0 auto;
+  max-width: 480px;
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: rgb(30, 30, 33);
+  color: #ffffff;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+  overscroll-behavior-y: none;
+}
 
-  .rule-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+/* 스크롤 스냅: 첫 페이지(홈) + 게임별 룰 페이지들을 한 화면씩 넘기는 단위 */
+.snap-section {
+  box-sizing: border-box;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
 
-  header {
-    text-align: center;
-    padding: 18px 0;
-  }
+.rule-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
-  header h1 {
-    margin: 25px 0 15px;
-    font-family: 'Anton', sans-serif;
-    font-size: 36px;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    white-space: nowrap;
-  }
+/* 마지막 페이지는 다음으로 넘길 페이지가 없으므로 스냅이 끝까지 스크롤을 막지 않게 예외 처리.
+   min-height:100vh + center로 남는 빈 여백이 생기면 문서의 진짜 끝이 그 빈 공간 한복판이 되어버려서,
+   마지막 페이지만 내용 그대로의 높이로 두고 화면 하단에 붙여 스크롤 끝 = 콘텐츠 끝이 되도록 함 */
+.rule-section:last-of-type {
+  scroll-snap-align: none;
+  scroll-snap-stop: normal;
+  min-height: auto;
+  justify-content: flex-end;
+}
 
-  .calendar {
-    width: 100%;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 8px 0;
-    gap: auto;
-  }
+/* ============================================
+   헤더
+   ============================================ */
+header {
+  text-align: center;
+  padding: 18px 0;
+}
 
-  .calendar .day {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-radius: 22%;
-    padding: 12px 12px 4px;
-    cursor: pointer;
-    font-weight: 700;
-  }
+header h1 {
+  margin: 25px 0 15px;
+  font-family: 'Anton', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
 
-  .calendar .day.selected {
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    font-weight: 900;
-  }
+/* ============================================
+   캘린더
+   ============================================ */
+.calendar {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 8px 0;
+  gap: auto;
+}
 
-  .calendar .day-label {
-    font-size: 14px;
-    opacity: 0.6;
-    font-weight: 300;
-  }
+.calendar .day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 22%;
+  padding: 12px 12px 4px;
+  cursor: pointer;
+  font-weight: 700;
+}
 
-  .calendar .date-num {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20%;
-    font-family: 'Oswald', sans-serif;
-    font-size: 26px;
-    font-weight: 700;
-    opacity: 0.4;
-    padding: 3px 0 0 1px;
-    box-sizing: border-box;
-  }
+.calendar .day.selected {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 900;
+}
 
-  .calendar .day.selected .day-label{
-    opacity: 1;
-  }
+.calendar .day-label {
+  font-size: 14px;
+  opacity: 0.6;
+  font-weight: 300;
+}
 
-  .calendar .day.selected .date-num{
-    opacity: 1;
-  }
+.calendar .date-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20%;
+  font-family: 'Oswald', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  opacity: 0.4;
+  padding: 3px 0 0 1px;
+  box-sizing: border-box;
+}
 
-  .calendar .day.today .day-label {
-    opacity: 1;
-    color: #fd7b4c;
-  }
+.calendar .day.selected .day-label { opacity: 1; }
+.calendar .day.selected .date-num  { opacity: 1; }
 
-  .calendar .day.today .date-num {
-    opacity: 1;
-    color: #fd7b4c;
-  }
+.calendar .day.today .day-label {
+  opacity: 1;
+  color: #fd7b4c;
+}
 
-  .status-card {
-    width: 100%;
-    margin: 12px 0 0;
-    background-color: #2a2a2e;
-    border-radius: 24px;
-    padding: 24px 24px 16px;
-    border: 1px solid rgba(90, 84, 84, 0.3);
-    box-sizing: border-box;
-  }
+.calendar .day.today .date-num {
+  opacity: 1;
+  color: #fd7b4c;
+}
 
-  .status-card-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
+/* ============================================
+   진행 상태 카드
+   ============================================ */
+.status-card {
+  width: 100%;
+  margin: 12px 0 0;
+  background-color: #2a2a2e;
+  border-radius: 24px;
+  padding: 24px 24px 16px;
+  border: 1px solid rgba(90, 84, 84, 0.3);
+  box-sizing: border-box;
+}
 
-  .status-card-no {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-  }
+.status-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+}
 
-  .status-card-no .no-label {
-    font-size: 12px;
-    font-weight: 500;
-    opacity: 0.5;
-  }
+.status-card-no {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
 
-  .status-card-no .no-number {
-    font-size: 26px;
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
-    line-height: 1;
-  }
+.status-card-no .no-label {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.5;
+}
 
-  .status-card-progress-label {
-    font-size: 14px;
-    opacity: 0.6;
-    white-space: nowrap;
-  }
+.status-card-no .no-number {
+  font-size: 26px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  line-height: 1;
+}
 
-  .progress-bar {
-    display: flex;
-    gap: 8px;
-    margin: 20px 0;
-  }
+.status-card-progress-label {
+  font-size: 14px;
+  opacity: 0.6;
+  white-space: nowrap;
+}
 
-  .progress-segment {
-    flex: 1;
-    height: 14px;
-    border-radius: 8px;
-    background-color: #3a3a3d;
-  }
+.progress-bar {
+  display: flex;
+  gap: 8px;
+  margin: 20px 0;
+}
 
-  .progress-segment.filled {
-    background-color: #ef3c20;
-  }
-  .status-card-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 5px 0 0;
-    gap: 16px;
-  }
+.progress-segment {
+  flex: 1;
+  height: 14px;
+  border-radius: 8px;
+  background-color: #3a3a3d;
+}
 
-  .status-legend {
-    display: flex;
-    gap: 16px;
-    font-size: 14px;
-    opacity: 0.8;
-  }
+.progress-segment.filled {
+  background-color: #ef3c20;
+}
 
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+.status-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 5px 0 0;
+  gap: 16px;
+}
 
-  .legend-item .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-  }
+.status-legend {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  opacity: 0.8;
+}
 
-  .legend-item .dot-done {
-    background-color: #3be06a;
-  }
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
-  .legend-item .dot-remain {
-    background-color: #5a5a5d;
-  }
+.legend-item .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
 
-  .continue-btn {
-    background-color: #ef3c20;
-    color: #ffffff;
-    border: none;
-    border-radius: 999px;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: 700;
-    font-family: inherit;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-  }
+.legend-item .dot-done   { background-color: #3be06a; }
+.legend-item .dot-remain { background-color: #5a5a5d; }
 
-  .games-section {
-    width: 100%;
-    margin: 40px 0 20px 10px;
-  }
+.continue-btn {
+  background-color: #ef3c20;
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
 
-  .games-header {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-  }
+/* ============================================
+   오늘의 게임 (Today's Games)
+   ============================================ */
+.games-section {
+  width: 100%;
+  margin: 40px 0 20px 10px;
+}
 
-  .games-header h2 {
-    font-size: 28px;
-    font-weight: 800;
-    margin: 0 0 16px;
-  }
+.games-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
 
-  .games-row {
-    display: flex;
-    gap: 13px;
-    overflow-x: auto;
-    padding-bottom: 8px;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE, Edge */
-  }
+.games-header h2 {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 16px;
+}
 
-  .games-row::-webkit-scrollbar {
-    display: none; /* Chrome, Safari */
-  }
+.games-row {
+  display: flex;
+  gap: 13px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE, Edge */
+}
 
-  .game-card {
-    flex: 0 0 128px;
-    height: 192px;
-    border-radius: 19px;
-    padding: 19px 19px 22px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+.games-row::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
 
-  .game-card.c1 { background-color: #ef5b45; }
-  .game-card.c2 { background-color: #3b5bfa; }
-  .game-card.c3 { background-color: #f2a33c; }
-  .game-card.c4 { background-color: #3fb56c; }
+.game-card {
+  flex: 0 0 128px;
+  height: 192px;
+  border-radius: 19px;
+  padding: 19px 19px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-  .game-card-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
+.game-card.c1 { background-color: var(--game-c1); }
+.game-card.c2 { background-color: var(--game-c2); }
+.game-card.c3 { background-color: var(--game-c3); }
+.game-card.c4 { background-color: var(--game-c4); }
 
-  .game-icon {
-    position: relative;
-    width: 45px;
-    height: 45px;
-    border-radius: 13px;
-    background-color: rgba(255, 255, 255, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: 700;
-    margin-left: -6px;
-  }
+.game-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
 
-  .play-badges {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 5px;
-    margin-right: -6px;
-  }
+.game-icon {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  border-radius: 13px;
+  background-color: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  margin-left: -6px;
+}
 
-  .play-badge {
-    background-color: rgba(0, 0, 0, 0.25);
-    color: #ffffff;
-    border: none;
-    border-radius: 999px;
-    padding: 6px 11px;
-    font-size: 10px;
-    font-weight: 800;
-    font-family: inherit;
-    white-space: nowrap;
-    cursor: pointer;
-  }
+.play-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  margin-right: -6px;
+}
 
-  .play-badge:disabled {
-    cursor: default;
-    opacity: 0.6;
-  }
+.play-badge {
+  background-color: rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 11px;
+  font-size: 10px;
+  font-weight: 800;
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
 
-  .play-badge.secondary {
-    background-color: rgba(0, 0, 0, 0.12);
-    font-size: 10px;
-    padding: 6px 10px;
-  }
+.play-badge:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
 
-  .game-title {
-    font-size: 18px;
-    font-weight: 800;
-    margin-bottom: 6px;
-  }
+.play-badge.secondary {
+  background-color: rgba(0, 0, 0, 0.12);
+  font-size: 10px;
+  padding: 6px 10px;
+}
 
-  .game-desc {
-    font-size: 11px;
-    opacity: 0.85;
-    line-height: 1.4;
-  }
+.game-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
 
-  .about-section {
-    width: 100%;
-    margin: 40px 0 20px 10px;
-  }
+.game-desc {
+  font-size: 11px;
+  opacity: 0.85;
+  line-height: 1.4;
+}
 
-  .about-title {
-    font-size: 28px;
-    font-weight: 800;
-    margin: 0 0 16px;
-  }
+/* ============================================
+   About
+   ============================================ */
+.about-section {
+  width: 100%;
+  margin: 40px 0 20px 10px;
+}
 
-  .about-desc {
-    font-size: 15px;
-    line-height: 1.7;
-    opacity: 0.65;
-  }
+.about-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 -10px;
+}
 
-  .rule-card {
-    width: 100%;
-    margin: 24px 0;
-  }
+.about-desc {
+  font-size: 15px;
+  line-height: 1.7;
+  opacity: 0.65;
+}
 
-  .rule-title-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 16px;
-    border-radius: 999px;
-    padding: 6px 0 6px;
-    margin-bottom: 16px;
-  }
+/* ============================================
+   게임별 상세 규칙 페이지 (룰 카드)
+   ============================================ */
+.rule-card {
+  width: 100%;
+  margin: 24px 0;
+}
 
-  .rule-title-chip .rule-icon {
-    width: 46px;
-    height: 46px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    font-weight: 700;
-    color: #ffffff;
-  }
+.rule-title-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  border-radius: 999px;
+  padding: 6px 0 6px;
+  margin-bottom: 16px;
+}
 
-  .rule-title-chip.c1 .rule-icon { background-color: #ef5b45; }
-  .rule-title-chip.c2 .rule-icon { background-color: #3b5bfa; }
-  .rule-title-chip.c3 .rule-icon { background-color: #f2a33c; }
-  .rule-title-chip.c4 .rule-icon { background-color: #3fb56c; }
+.rule-title-chip .rule-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+}
 
-  .rule-title-chip .rule-name {
-    font-size: 28px;
-    font-weight: 800;
-  }
+.rule-title-chip.c1 .rule-icon { background-color: var(--game-c1); }
+.rule-title-chip.c2 .rule-icon { background-color: var(--game-c2); }
+.rule-title-chip.c3 .rule-icon { background-color: var(--game-c3); }
+.rule-title-chip.c4 .rule-icon { background-color: var(--game-c4); }
 
-  .rule-image-box {
-    width: 100%;
-    aspect-ratio: 1.6 / 1;
-    background-color: #2a2a2e;
-    border-radius: 16px;
-    margin-bottom: 20px;
-  }
+.rule-title-chip .rule-name {
+  font-size: 28px;
+  font-weight: 800;
+}
 
-  .rule-howto-label {
-    font-size: 26px;
-    font-weight: 800;
-    opacity: 0.6;
-    margin-bottom: 8px;
-  }
+.rule-image-box {
+  width: 100%;
+  height: calc(100vh - 240px);
+  min-height: 300px;
+  max-height: 65vh;
+  background-color: #2a2a2e;
+  border-radius: 16px;
+  margin-bottom: 20px;
+}
 
-  .rule-desc {
-    font-size: 18px;
-    line-height: 1.5;
-  }
+.rule-howto-label {
+  font-size: 20px;
+  font-weight: 800;
+  opacity: 0.6;
+  margin-bottom: 6px;
+  margin-left: 10px;
+}
+
+.rule-desc {
+  font-size: 16px;
+  line-height: 1.45;
+  margin: 0 10px;
+  text-align: justify;
+}
