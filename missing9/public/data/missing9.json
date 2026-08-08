@@ -1699,8 +1699,7 @@
         {"order": 6, "position": "지", "name": "이대호", "rbi": 0, "sb": 0},
         {"order": 7, "position": "二", "name": "고영민", "rbi": 0, "sb": 0},
         {"order": 8, "position": "포", "name": "강민호", "rbi": 0, "sb": 0},
-        {"order": 9, "position": "유", "name": "박진만", "rbi": 0, "sb": 0},
-        {"order": "SP", "position": "투", "name": "류현진", "rbi": 0, "sb": 0}
+        {"order": 9, "position": "유", "name": "박진만", "rbi": 0, "sb": 0}
       ]
     }
   ]
